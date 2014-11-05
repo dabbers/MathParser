@@ -25,5 +25,9 @@ namespace dab.Library.MathParser
             var tmp = this.Inner.Evaluate();
             return new UnitDouble((decimal)Math.Sqrt((double)tmp.Value), tmp.UnitType, tmp.Unit, tmp.Converter);
         }
+        public override string ToString()
+        {
+            return "Sqrt(" + this.Inner.ToString().TrimOuterParens() + ")";
+        }
     }
 }

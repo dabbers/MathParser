@@ -72,6 +72,7 @@ namespace dab.Library.MathParser
             conversionMap.Add(CapacityDigitalUnits.Petabyte, 8 * (long)1024 * 1024 * 1024 * 1024 * 1024);
             conversionMap.Add(CapacityDigitalUnits.Exabyte, 8 * (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024);
             conversionMap.Add(CapacityDigitalUnits.Zettabyte, 8 * (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024);
+            conversionMap.Add(CapacityDigitalUnits.Yottabyte, 8 * (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024);
         }
 
         /// <summary>
@@ -104,91 +105,5 @@ namespace dab.Library.MathParser
             return value / conversion;
         }
 
-        public override UnitDouble GetReducedUnit(UnitDouble value)
-        {
-            var types = Enum.GetValues(typeof(CapacityDigitalUnits));
-            decimal smallestOver1 = value.Value;
-            CapacityDigitalUnits smallestOver1Type;
-
-            smallestOver1Type = (CapacityDigitalUnits)value.Unit;
-            //(DistanceUnits)Enum.Parse(typeof(DistanceUnits), value.Unit);
-
-
-            foreach (CapacityDigitalUnits type in types)
-            {
-                var unitTypes = type.GetAttributeOfType<UnitTypeAttribute>();
-                
-                if (unitTypes == null) continue;
-
-                if (unitTypes.Where(p => p.UnitType == value.UnitType).Count() > 0)
-                {
-                    var convertedValue = this.Convert(smallestOver1, smallestOver1Type, type);
-                    
-                    // Determine if we need to go to a smaller scale, bigger number
-                    if (smallestOver1 < 1)
-                    {
-                        if (convertedValue > smallestOver1 && convertedValue < 10000)
-                        {
-                            smallestOver1 = convertedValue;
-                            smallestOver1Type = type;
-                        }
-                    }
-                    else // we need to go bigger scale, smaller number
-                    {
-                        if (convertedValue < smallestOver1 && convertedValue > .5M)
-                        {
-                            smallestOver1 = convertedValue;
-                            smallestOver1Type = type;
-                        }
-                    }
-                }
-            }
-            
-            return new UnitDouble(smallestOver1, value.UnitType, smallestOver1Type, this);
-        }
-
-        public override bool GetUnitFromString(string unit, out Enum result)
-        {
-            var values = Enum.GetValues(typeof(CapacityDigitalUnits));
-            unit = unit.ToLower();
-
-            foreach (CapacityDigitalUnits value in values)
-            {
-                if (value.ToString().ToLower() == unit)
-                {
-                    result = value;
-                    return true;
-                }
-
-                var abbreviations = value.GetAttributeOfType<UnitAbbreviationAttribute>();
-                if (abbreviations != null)
-                {
-                    foreach (var abbreviation in abbreviations)
-                    {
-                        if (abbreviation.Abbreviation.ToLower() == unit)
-                        {
-                            result = value;
-                            return true;
-                        }
-                    }
-                }
-
-                var plurals = value.GetAttributeOfType<UnitPluralAttribute>();
-                if (plurals != null)
-                {
-                    foreach (var plural in plurals)
-                    {
-                        if (plural.Plural.ToLower() == unit)
-                        {
-                            result = value;
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            result = CapacityDigitalUnits.Unknown;
-            return false;
-        }
     }
 }

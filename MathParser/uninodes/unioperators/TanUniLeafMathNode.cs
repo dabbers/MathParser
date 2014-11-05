@@ -25,5 +25,10 @@ namespace dab.Library.MathParser
             var tmp = this.Inner.Evaluate();
             return new UnitDouble((decimal)Math.Tan((double)tmp.Value), tmp.UnitType, tmp.Unit, tmp.Converter);
         }
+
+        public override string ToString()
+        {
+            return "Tan(" + this.Inner.ToString().TrimOuterParens() + ")";
+        }
     }
 }

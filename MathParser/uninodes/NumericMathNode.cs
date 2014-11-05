@@ -21,7 +21,20 @@ namespace dab.Library.MathParser
 
         public override UnitDouble Evaluate()
         {
-            return (UnitDouble)this.value;
+            var undub = this.value as UnitDouble;
+            //undub.UnitType = this.UnitType;
+            return undub;
+        }
+
+        public override string ToString()
+        {
+            if (((UnitDouble)this.Value).UnitType == UnitTypes.Hexadecimal)
+            {
+                return "0x"+((int)((UnitDouble)this.Value).Value).ToString("X");
+            }
+            string number = ((UnitDouble)this.Value).Value.ToString();
+            // In case I need to manipulate it somehow in the future
+            return number;
         }
     }
 }

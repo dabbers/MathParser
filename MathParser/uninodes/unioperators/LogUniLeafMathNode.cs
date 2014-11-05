@@ -29,5 +29,9 @@ namespace dab.Library.MathParser
 
             return new UnitDouble((decimal)Math.Log((double)tmp.Value, (double)bse.Value), tmp.UnitType, tmp.Unit, tmp.Converter);
         }
+        public override string ToString()
+        {
+            return "Log " + this.Base.ToString() + "(" + this.Inner.ToString().TrimOuterParens() + ")";
+        }
     }
 }

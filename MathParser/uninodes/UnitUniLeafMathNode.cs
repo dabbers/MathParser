@@ -31,8 +31,6 @@ namespace dab.Library.MathParser
 
             // We get the Enum representation of these units.
 
-            val.Converter = converter;
-            val.Unit = converter.BaseUnit;
 
             // Check that the child doesn't have a type associated with it yet.
             // UnitTypes.None should be the default value for unittypes.
@@ -46,9 +44,11 @@ namespace dab.Library.MathParser
                 }
 
                 val.Reduce = false;
-                val.Value = converter.Convert(val.Value, converter.BaseUnit, this.labelledUnit);
+                val.Value = converter.Convert(val.Value, val.Unit, this.labelledUnit);
+                val.DesiredUnit = this.labelledUnit;
             }
-            val.Unit = this.labelledUnit;
+
+            val.Converter = this.converter;
 
             val.UnitType = this.unitType;
 
@@ -59,8 +59,44 @@ namespace dab.Library.MathParser
 
             // Then we convert.
             val.Value = converter.Convert(val.Value, this.labelledUnit, converter.BaseUnit);
+            val.Unit = this.converter.BaseUnit;
             
             return val;
+        }
+
+        public override string ToString()
+        {
+            string number = this.Inner.ToString();
+            string seperator = " ";
+
+            var numeric = this.Inner as NumericMathNode;
+
+            if (null != numeric)
+            {
+                if (UnitTypes.Hexadecimal == numeric.UnitType)
+                {
+                    number = ((int)this.converter.Convert(((UnitDouble)numeric.Value).Value, this.converter.BaseUnit, this.labelledUnit)).ToString("X");
+                }
+                else
+                {
+                    number = this.converter.Convert(((UnitDouble)numeric.Value).Value, this.converter.BaseUnit, this.labelledUnit).ToString("###,###,###,###,##0.############");
+                }
+            }
+            else
+            {
+                var unitleaf = this.Inner as UnitUniLeafMathNode;
+
+                if (null != unitleaf)
+                {
+                    if (unitleaf.labelledUnit != this.labelledUnit)
+                    {
+                        seperator = " as ";
+                    }
+                }
+            }
+
+            return "(" + number + seperator + this.labelledUnit.ToString() + ")";
+            
         }
 
         private UnitTypes unitType;

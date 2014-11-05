@@ -10,9 +10,94 @@ namespace dab.Library.MathParser
     {
         public abstract decimal Convert(decimal value, Enum from, Enum to);
 
-        public abstract bool GetUnitFromString(string unit, out Enum result);
+        //public abstract bool GetUnitFromString(string unit, out Enum result);
+        
+        public virtual UnitDouble GetReducedUnit(UnitDouble value)
+        {
+            var types = Enum.GetValues(BaseUnit.GetType());
+            decimal smallestOver1 = value.Value;
+            Enum smallestOver1Type;
 
-        public abstract UnitDouble GetReducedUnit(UnitDouble value);
+            smallestOver1Type = value.Unit;
+
+            foreach (Enum type in types)
+            {
+                var unitTypes = type.GetAttributeOfType<UnitTypeAttribute>();
+
+                if (unitTypes == null) continue;
+
+                if (unitTypes.Where(p => p.UnitType == value.UnitType).Count() > 0)
+                {
+                    var convertedValue = this.Convert(smallestOver1, smallestOver1Type, type);
+
+                    // Determine if we need to go to a smaller scale, bigger number
+                    if (smallestOver1 < 1)
+                    {
+                        if (convertedValue > smallestOver1 && convertedValue < 10000)
+                        {
+                            smallestOver1 = convertedValue;
+                            smallestOver1Type = type;
+                        }
+                    }
+                    else // we need to go bigger scale, smaller number
+                    {
+                        if (convertedValue < smallestOver1 && convertedValue > .5M)
+                        {
+                            smallestOver1 = convertedValue;
+                            smallestOver1Type = type;
+                        }
+                    }
+                }
+            }
+
+            return new UnitDouble(smallestOver1, value.UnitType, smallestOver1Type, this);
+        }
+
+
+        public virtual bool GetUnitFromString(string unit, out Enum result)
+        {
+            var values = Enum.GetValues(BaseUnit.GetType());
+            unit = unit.ToLower();
+
+            foreach (Enum value in values)
+            {
+                if (value.ToString().ToLower() == unit)
+                {
+                    result = value;
+                    return true;
+                }
+
+                var abbreviations = value.GetAttributeOfType<UnitAbbreviationAttribute>();
+                if (abbreviations != null)
+                {
+                    foreach (var abbreviation in abbreviations)
+                    {
+                        if (abbreviation.Abbreviation.ToLower() == unit)
+                        {
+                            result = value;
+                            return true;
+                        }
+                    }
+                }
+
+                var plurals = value.GetAttributeOfType<UnitPluralAttribute>();
+                if (plurals != null)
+                {
+                    foreach (var plural in plurals)
+                    {
+                        if (plural.Plural.ToLower() == unit)
+                        {
+                            result = value;
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            result = (Enum)Enum.Parse(BaseUnit.GetType(), "Unknown");
+
+            return false;
+        }
 
         public abstract Enum BaseUnit { get; }
 

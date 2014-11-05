@@ -25,5 +25,9 @@ namespace dab.Library.MathParser
             var tmp = this.Inner.Evaluate();
             return new UnitDouble((decimal)Math.Atan((double)tmp.Value), tmp.UnitType, tmp.Unit, tmp.Converter);
         }
+        public override string ToString()
+        {
+            return "ATan(" + this.Inner.ToString().TrimOuterParens() + ")";
+        }
     }
 }

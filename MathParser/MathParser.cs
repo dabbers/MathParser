@@ -77,6 +77,17 @@ namespace dab.Library.MathParser
             return evaluate(this.Root);
         }
 
+        public string GetInterpretation(string expression)
+        {
+            this.Parse(expression);
+            return this.GetInterpretation();
+        }
+
+        public string GetInterpretation()
+        {
+            return this.Root.ToString().TrimOuterParens();
+        }
+
         private UnitDouble evaluate(IMathNode node)
         {
             if (node == null)
@@ -100,46 +111,19 @@ namespace dab.Library.MathParser
         {
             if (String.IsNullOrEmpty(expression))
                 return null;
+            
+            expression = expression.Trim();
 
-            // Remove outer parenthesis
-            while(expression[0] == '(' && expression.Last() == ')')
-            {
-                // Ensure the last parenthesis belongs to the first
-                int parenCount = 0;
-
-                int pos = expression.Length - 1;
-
-                for(; pos >= 0; pos--)
-                {
-                    if (expression[pos] == ')')
-                    {
-                        parenCount++;
-                    }
-                    else if (expression[pos] == '(')
-                    {
-                        parenCount--;
-                    }
-
-                    if ((parenCount == 0) && pos > 0) break;
-                }
-
-                // If our first and last parenthesis are together, remove them
-                if (pos == -1)
-                {
-                    expression = expression.Substring(1, expression.Length - 2);
-                }
-                else // We can't perform any removal today.
-                {
-                    break;
-                }
-            }
+            expression = expression.TrimOuterParens();
             
             short lowestop = -1;
             int oppos = -1;
             int parens = 0;
+            int oplength = 0;
+            string symbol = String.Empty;
 
             // Check for misplaced operators ( + - / * ^ )
-            if (this.invalidPreceedingOperators.Keys.Contains(expression[0]) || this.invalidPreceedingOperators.Keys.Contains(expression.Last()))
+            if (this.invalidPreceedingOperators.Keys.Contains(expression[0].ToString()) || this.invalidPreceedingOperators.Keys.Contains(expression.Last().ToString()))
             {
                 throw new InvalidMathExpressionException(expression);
             }
@@ -172,7 +156,14 @@ namespace dab.Library.MathParser
                     throw new InvalidMathExpressionException(expression);
                 }
 
-                if (!this.operators.ContainsKey(expression[pos]))
+                var searchop = expression[pos].ToString();
+                if (searchop == "<" || searchop == ">")
+                {
+                    searchop = expression[pos - 1].ToString() + expression[pos].ToString();
+                    pos--;
+                }
+
+                if (!this.operators.ContainsKey(searchop))
                 {
                     if (!Char.IsWhiteSpace(expression[pos]))
                     {
@@ -181,12 +172,12 @@ namespace dab.Library.MathParser
                     continue;
                 }
 
-                if (this.invalidPreceedingOperators.ContainsKey(expression[pos]) && this.operators.ContainsKey(expression[pos - 1]))
+                if (this.invalidPreceedingOperators.ContainsKey(searchop) && this.operators.ContainsKey(expression[pos - 1].ToString()))
                 {
                     throw new InvalidMathExpressionException("OP: " + expression);
                 }
 
-                opval = this.operators[expression[pos]];
+                opval = this.operators[searchop];
 
                 if (parens != 0 || lowestop > opval)
                 {
@@ -199,6 +190,8 @@ namespace dab.Library.MathParser
 
                 lowestop = opval;
                 oppos = pos;
+                oplength = searchop.Length - 1;
+                symbol = searchop;
             }
 
             if (parens != 0)
@@ -258,25 +251,25 @@ namespace dab.Library.MathParser
 
                 if (oppos-1 > 0)
                 {
-                    left = expression.Substring(0, oppos);
+                    left = expression.Substring(0, oppos - oplength);
                 }
                 else
                 {
                     left = expression[0].ToString();
                 }
 
-                char smbl = expression[oppos];
+                //string smbl = expression[oppos].ToString();
 
-                string right = expression.Substring(oppos + 1, expression.Length - oppos - 1);
+                string right = expression.Substring(oppos + 1 + oplength, expression.Length - oppos - 1 - oplength);
 
-                return operFact.CreateOperatorNode(smbl, this.parse(left), this.parse(right));
+                return operFact.CreateOperatorNode(symbol, this.parse(left), this.parse(right));
             }
         }
 
         private UniLeafFactory uniLeafFact = new UniLeafFactory();
         private OperatorFactory operFact = new OperatorFactory();
-        private Dictionary<char, short> operators = new Dictionary<char, short>() { { '+', 5 }, { '-', 4 }, { '/', 3 }, { '*', 2 }, { '^', 1 } };
-        private Dictionary<char, short> invalidPreceedingOperators = new Dictionary<char, short>() { { '+', 4 }, { '/', 3 }, { '*', 2 }, { '^', 1 } };
+        private Dictionary<string, short> operators = new Dictionary<string, short>() { { "|", 6 }, { "&", 8 },{ ">>", 7 }, { "<<", 6 }, { "+", 5 }, { "-", 4 }, { "/", 3 }, { "*", 2 }, { "^", 1 } };
+        private Dictionary<string, short> invalidPreceedingOperators = new Dictionary<string, short>() { { "|", 6 }, { "&", 8 }, { ">>", 7 }, { "<<", 6 }, { "+", 4 }, { "/", 3 }, { "*", 2 }, { "^", 1 } };
     }
 
 #region Exceptions

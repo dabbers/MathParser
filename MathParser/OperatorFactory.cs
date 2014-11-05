@@ -15,20 +15,28 @@ namespace dab.Library.MathParser
         /// <param name="left">The left part of the operator</param>
         /// <param name="right">The right part of the operator</param>
         /// <returns>Valid operators return IMathNode, null if no operator</returns>
-        public IMathNode CreateOperatorNode(char c, IMathNode left, IMathNode right)
+        public IMathNode CreateOperatorNode(string c, IMathNode left, IMathNode right)
         {
             switch(c)
             {
-                case '+':
+                case "+":
                     return new AdditionBiLeafMathNode(left, right);
-                case '-':
+                case "-":
                     return new SubtractionBiLeafMathNode(left, right);
-                case '*':
+                case "*":
                     return new MultiplicationBiLeafMathNode(left, right);
-                case '/':
+                case "/":
                     return new DivisionBiLeafMathNode(left, right);
-                case '^':
+                case "^":
                     return new ExponentBiLeafMathNode(left, right);
+                case "&":
+                    return new BitwiseAndBiLeafMathNode(left, right);
+                case "|" :
+                    return new BitwiseOrBiLeafMathNode(left, right);
+                case "<<":
+                    return new BitwiseShiftLeftBiLeafMathNode(left, right);
+                case ">>":
+                    return new BitwiseShiftRightBiLeafMathNode(left, right);
                 default:
                     return null;
             }

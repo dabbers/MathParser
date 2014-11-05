@@ -16,11 +16,17 @@ namespace dab.Library.MathParser
                 new WeightConverter(),
                 new CapacityDigitalConverter(),
                 new CurrencyConverter(exchangeUrl, cachePath),
-                new RBOMBConverter()
+                new RBOMBConverter(),
+                new TimeConverter()
             };
         }
 
-        private static Regex unitParser = new Regex(@"([0-9\.]+|.+\s)\s*([A-z]+)(?:\s+to\s+([A-z]+))*");
+        // Breaks up the expression into either a conversion of (expr) to unit or (exp) unit or unit(exp) with whitespace optional.
+        private static Regex unitParser = new Regex
+        (
+            @"^(?:(?<value>.+)\s+(?:to|as)\s+(?<to>[A-z$€£฿]+)|(?<value>(?!\s(?:to|as)\s).+?)\s*(?<from>[A-z$€£฿]+)|(?<from>[$€£฿])\s*(?<value>(?!\s(?:to|as)\s).+?))$"
+        );
+
         private UnitConverter[] converters;
 
         public IMathNode TryParse(string expression, MathParser parser)
@@ -29,38 +35,60 @@ namespace dab.Library.MathParser
 
             if (false == results.Success)
             {
+                expression = expression.Trim();
+
+                // Probably formatted via 0x hex? Check for hex input
+                if (expression[0] == '0' && (expression[1] == 'x' || expression[1] == 'X'))
+                {
+                    string number = expression.Substring(2);
+                    var val = (decimal)int.Parse(number, System.Globalization.NumberStyles.HexNumber);
+                    return new NumericMathNode(new UnitDouble(val, UnitTypes.Hexadecimal, null, null));
+                }
+
                 return null;
             }
-            
+
+            var expr = results.Groups["value"];
+            var to = results.Groups["to"];
+            var from = results.Groups["from"];
+            Group actionable;
+
             // Continue parsing the left side of this Unit declaration
-            var valu = parser.Parse(results.Groups[1].Value);
+            // If this is a conversion, this will come back here until there
+            // are no more units left to parse through
+            var valu = parser.Parse(expr.Value);
 
-            var converter = this.GetUnitConverter(results.Groups[2].Value);
 
-            if (converter == null)
+            // If we are finally inside the expression of expr units
+            if (from.Success)
             {
-                throw new InvalidUnitTypeException(results.Groups[2].Value);
-            }
-
-            // Determines things like DistanceImperical, DistanceMetric, etc
-            Enum tmpEnum;
-            converter.GetUnitFromString(results.Groups[2].Value, out tmpEnum);
-            var hold = tmpEnum.GetAttributeOfType<UnitTypeAttribute>().FirstOrDefault();
-
-            // create a new unit node with this unit at [2] and value of [1]
-            if (String.IsNullOrEmpty(results.Groups[3].Value))
-            {
-                return new UnitUniLeafMathNode(valu, (hold == null ? UnitTypes.None : hold.UnitType), converter, tmpEnum);
+                actionable = from;
             }
             else
             {
-                Enum tmpEnum3;
-                converter.GetUnitFromString(results.Groups[3].Value, out tmpEnum3);
-                // Create a unit node converting value of [1] of [2] to [3]
-                var inside = new UnitUniLeafMathNode(valu, (hold == null ? UnitTypes.None : hold.UnitType), converter, tmpEnum);
-
-                return new UnitUniLeafMathNode(inside, (hold == null ? UnitTypes.None : hold.UnitType), converter, tmpEnum3);
+                actionable = to;
             }
+
+            UnitConverter converter = this.GetUnitConverter(actionable.Value);
+
+            if (converter == null)
+            {
+                throw new InvalidUnitTypeException(actionable.Value);
+            }
+
+
+            // Determines things like DistanceImperical, DistanceMetric, etc
+            Enum tmpEnum;
+            converter.GetUnitFromString(actionable.Value, out tmpEnum);
+            var hold = tmpEnum.GetAttributeOfType<UnitTypeAttribute>().FirstOrDefault();
+
+            if (hold != null)
+            {
+                valu.UnitType = hold.UnitType;
+            }
+
+            return new UnitUniLeafMathNode(valu, (hold == null ? UnitTypes.None : hold.UnitType), converter, tmpEnum);
+
         }
 
         public UnitConverter GetUnitConverter(string unit)

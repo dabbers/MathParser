@@ -25,5 +25,9 @@ namespace dab.Library.MathParser
             var tmp = this.Inner.Evaluate();
             return new UnitDouble((decimal)Math.Cos((double)tmp.Value), tmp.UnitType, tmp.Unit, tmp.Converter);
         }
+        public override string ToString()
+        {
+            return "Cos(" + this.Inner.ToString().TrimOuterParens() + ")";
+        }
     }
 }

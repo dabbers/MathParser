@@ -17,11 +17,25 @@ namespace dab.Library.MathParser
     /// </summary>
     public class UnitDouble
     {
+        public UnitDouble(UnitDouble copy)
+        {
+            this.UnitType = copy.UnitType;
+            this.Value = copy.Value;
+            this.Unit = copy.Unit;
+            this.DesiredUnit = copy.DesiredUnit;
+            this.Converter = copy.Converter;
+            this.Reduce = copy.Reduce;
+        }
         public UnitTypes UnitType { get; set; }
 
         public decimal Value { get; set; }
 
         public Enum Unit { get; set; }
+
+        /// <summary>
+        /// The unit you wish to have printed out instead of being reduced
+        /// </summary>
+        public Enum DesiredUnit { get; set; }
 
         public UnitConverter Converter { get; set; }
 
@@ -45,7 +59,7 @@ namespace dab.Library.MathParser
 
         public override string ToString()
         {
-            var value = this;
+            var value = new UnitDouble(this);
 
             if (this.Converter != null && Reduce)
             {
@@ -53,10 +67,11 @@ namespace dab.Library.MathParser
             }
             else if (this.Converter != null && !Reduce)
             {
-                value.Value = this.Converter.Convert(value.Value, Converter.BaseUnit, value.Unit);
+                value.Value = this.Converter.Convert(value.Value, Converter.BaseUnit, value.DesiredUnit);
+                value.Unit = value.DesiredUnit;
             }
 
-            string formatting = "###,###,###,###,###.############";
+            string formatting = "###,###,###,###,##0.############";
 
             if (Reduce && value.Value > 10000000000000000)
             {
@@ -69,6 +84,10 @@ namespace dab.Library.MathParser
                 value.Value = Math.Round(value.Value, 2);
             }
 
+            if (value.UnitType == UnitTypes.Hexadecimal)
+            {
+                return "0x" + ((int)value.Value).ToString("X");
+            }
 
             value.Value = Math.Round(value.Value, 6);
             string unitlabel = String.Empty;
@@ -90,59 +109,144 @@ namespace dab.Library.MathParser
             return value.Value.ToString(formatting) + (this.Converter != null ? " " + unitlabel : "");
         }
 
+        #region Operators
+
+        
         public static UnitDouble operator +(UnitDouble left, UnitDouble right)
         {
-            if (left.Converter != right.Converter && right.UnitType != UnitTypes.None && left.UnitType != UnitTypes.None)
+            UnitConverter convert;
+            UnitTypes unittype;
+            Enum unit;
+
+            if (false == confirmCompatibleTypes(left, right, out convert, out unittype, out unit))
             {
                 throw new UnitMismatchException(left.UnitType.ToString(), right.UnitType.ToString());
             }
-
-            var convert = (left.UnitType == UnitTypes.None ? right.Converter : left.Converter);
-            var unittype = (left.UnitType == UnitTypes.None ? right.UnitType : left.UnitType);
-            var unit = (left.UnitType == UnitTypes.None ? right.Unit : left.Unit);
 
             return new UnitDouble(left.Value + right.Value, unittype, unit, convert);
         }
         public static UnitDouble operator -(UnitDouble left, UnitDouble right)
         {
-            if (left.Converter != right.Converter && right.UnitType != UnitTypes.None && left.UnitType != UnitTypes.None)
+            UnitConverter convert;
+            UnitTypes unittype;
+            Enum unit;
+
+            if (false == confirmCompatibleTypes(left, right, out convert, out unittype, out unit))
             {
                 throw new UnitMismatchException(left.UnitType.ToString(), right.UnitType.ToString());
             }
-
-            var convert = (left.UnitType == UnitTypes.None ? right.Converter : left.Converter);
-            var unittype = (left.UnitType == UnitTypes.None ? right.UnitType : left.UnitType);
-            var unit = (left.UnitType == UnitTypes.None ? right.Unit : left.Unit);
 
             return new UnitDouble(left.Value - right.Value, unittype, unit, convert);
         }
         public static UnitDouble operator /(UnitDouble left, UnitDouble right)
         {
-            if (left.Converter != right.Converter && right.UnitType != UnitTypes.None && left.UnitType != UnitTypes.None)
+            UnitConverter convert;
+            UnitTypes unittype;
+            Enum unit;
+
+            if (false == confirmCompatibleTypes(left, right, out convert, out unittype, out unit))
             {
                 throw new UnitMismatchException(left.UnitType.ToString(), right.UnitType.ToString());
             }
-
-            var convert = (left.UnitType == UnitTypes.None ? right.Converter : left.Converter);
-            var unittype = (left.UnitType == UnitTypes.None ? right.UnitType : left.UnitType);
-            var unit = (left.UnitType == UnitTypes.None ? right.Unit : left.Unit);
 
             return new UnitDouble(left.Value / right.Value, unittype, unit, convert);
         }
         public static UnitDouble operator *(UnitDouble left, UnitDouble right)
         {
-            if (left.Converter != right.Converter && right.UnitType != UnitTypes.None && left.UnitType != UnitTypes.None)
+            UnitConverter convert;
+            UnitTypes unittype;
+            Enum unit;
+
+            if (false == confirmCompatibleTypes(left, right, out convert, out unittype, out unit))
             {
                 throw new UnitMismatchException(left.UnitType.ToString(), right.UnitType.ToString());
             }
 
-            var convert = (left.UnitType == UnitTypes.None ? right.Converter : left.Converter);
-            var unittype = (left.UnitType == UnitTypes.None ? right.UnitType : left.UnitType);
-            var unit = (left.UnitType == UnitTypes.None ? right.Unit : left.Unit);
-
             return new UnitDouble(left.Value * right.Value, unittype, unit, convert);
         }
+        public static UnitDouble operator &(UnitDouble left, UnitDouble right)
+        {
+            UnitConverter convert;
+            UnitTypes unittype;
+            Enum unit;
 
+            if (false == confirmCompatibleTypes(left, right, out convert, out unittype, out unit))
+            {
+                throw new UnitMismatchException(left.UnitType.ToString(), right.UnitType.ToString());
+            }
+
+            return new UnitDouble((decimal)((int)left.Value & (int)right.Value), unittype, unit, convert);
+        }
+        public static UnitDouble operator |(UnitDouble left, UnitDouble right)
+        {
+            UnitConverter convert;
+            UnitTypes unittype;
+            Enum unit;
+
+            if (false == confirmCompatibleTypes(left, right, out convert, out unittype, out unit))
+            {
+                throw new UnitMismatchException(left.UnitType.ToString(), right.UnitType.ToString());
+            }
+
+            return new UnitDouble((decimal)((int)left.Value | (int)right.Value), unittype, unit, convert);
+        }
+        public static UnitDouble operator <<(UnitDouble left, int right)
+        {
+            UnitConverter convert;
+            UnitTypes unittype;
+            Enum unit;
+
+            if (false == confirmCompatibleTypes(left, null, out convert, out unittype, out unit))
+            {
+                throw new UnitMismatchException(left.UnitType.ToString(), String.Empty);
+            }
+
+            return new UnitDouble((decimal)((int)left.Value << right), unittype, unit, convert);
+        }
+        public static UnitDouble operator >>(UnitDouble left, int right)
+        {
+            UnitConverter convert;
+            UnitTypes unittype;
+            Enum unit;
+
+            if (false == confirmCompatibleTypes(left, null, out convert, out unittype, out unit))
+            {
+                throw new UnitMismatchException(left.UnitType.ToString(), String.Empty);
+            }
+
+            return new UnitDouble((decimal)((int)left.Value >> right), unittype, unit, convert);
+        }
+        public static UnitDouble operator ~(UnitDouble left)
+        {
+            UnitConverter convert;
+            UnitTypes unittype;
+            Enum unit;
+
+            if (false == confirmCompatibleTypes(left, null, out convert, out unittype, out unit))
+            {
+                throw new UnitMismatchException(left.UnitType.ToString(), String.Empty);
+            }
+
+            return new UnitDouble((decimal)(~(int)left.Value), unittype, unit, convert);
+        }
+        #endregion
+
+        private static bool confirmCompatibleTypes(UnitDouble left, UnitDouble right, out UnitConverter convert, out UnitTypes unittype, out Enum unit)
+        {
+            if (right != null && left.Converter != right.Converter && right.UnitType != UnitTypes.None && left.UnitType != UnitTypes.None)
+            {
+                convert = null;
+                unittype = UnitTypes.None;
+                unit = null;
+                return false;
+            }
+
+            convert = (left.UnitType == UnitTypes.None && right != null ? right.Converter : left.Converter);
+            unittype = (left.UnitType == UnitTypes.None && right != null ? right.UnitType : left.UnitType);
+            unit = (left.UnitType == UnitTypes.None && right != null ? right.Unit : left.Unit);
+
+            return true;
+        }
     }
 
     public enum UnitTypes
@@ -158,14 +262,20 @@ namespace dab.Library.MathParser
         CapacityDigital,
 
         SpeedDigital,
-        
+
+        Currency,
+
+        Hexadecimal,
+
+        Time,
+
+
         SpeedMetric,
         SpeedImperical,
         
         Degrees,
         Radians,
         
-        Currency,
 
         RBOMB
 

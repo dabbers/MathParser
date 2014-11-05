@@ -42,6 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="binodes\operators\BitwiseAndBiLeafMathNode.cs" />
+    <Compile Include="binodes\operators\BitwiseOrBiLeafMathNode.cs" />
+    <Compile Include="binodes\operators\BitwiseShiftLeftBiLeafMathNode.cs" />
+    <Compile Include="binodes\operators\BitwiseShiftRightBiLeafMathNode.cs" />
     <Compile Include="binodes\operators\DivisionBiLeafMathNode.cs" />
     <Compile Include="binodes\operators\MultiplicationBiLeafMathNode.cs" />
     <Compile Include="OperatorFactory.cs" />
@@ -51,6 +55,7 @@
     <Compile Include="binodes\BiLeafMathNode.cs" />
     <Compile Include="IMathNode.cs" />
     <Compile Include="MathParser.cs" />
+    <Compile Include="RemoveOuterParens.cs" />
     <Compile Include="SerializableDictionary.cs" />
     <Compile Include="uninodes\NumericMathNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +78,7 @@
     <Compile Include="UnitTypes\CurrencyConverter.cs" />
     <Compile Include="UnitTypes\CapacityDigitalConverter.cs" />
     <Compile Include="UnitTypes\RBOMBConverter.cs" />
+    <Compile Include="UnitTypes\TimeConverter.cs" />
     <Compile Include="UnitTypes\WeightConverter.cs" />
     <Compile Include="UnitTypes\DistanceConverter.cs" />
     <Compile Include="UnitTypes\UnitConverter.cs" />

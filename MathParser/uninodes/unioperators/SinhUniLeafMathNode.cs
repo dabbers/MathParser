@@ -25,5 +25,9 @@ namespace dab.Library.MathParser
             var tmp = this.Inner.Evaluate();
             return new UnitDouble((decimal)Math.Sinh((double)tmp.Value), tmp.UnitType, tmp.Unit, tmp.Converter);
         }
+        public override string ToString()
+        {
+            return "Sinh(" + this.Inner.ToString().TrimOuterParens() + ")";
+        }
     }
 }

@@ -13,6 +13,15 @@ namespace dab.Library.MathParser
             : base(left, right, symbol)
         {
         }
+        public SymbolMathNode(IMathNode left, IMathNode right, string symbol)
+            : base(left, right, symbol)
+        {
+        }
+
+        public override string ToString()
+        {
+            return "(" + left.ToString() + " " + Value + " " + right.ToString() + ")";
+        }
 
     }
 }
