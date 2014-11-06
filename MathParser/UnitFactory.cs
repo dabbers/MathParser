@@ -31,20 +31,16 @@ namespace dab.Library.MathParser
 
         public IMathNode TryParse(string expression, MathParser parser)
         {
+            var possiblyhex = this.isHex(expression);
+            if (possiblyhex != null)
+            {
+                return possiblyhex;
+            }
+
             var results = unitParser.Match(expression);
 
             if (false == results.Success)
             {
-                expression = expression.Trim();
-
-                // Probably formatted via 0x hex? Check for hex input
-                if (expression[0] == '0' && (expression[1] == 'x' || expression[1] == 'X'))
-                {
-                    string number = expression.Substring(2);
-                    var val = (decimal)int.Parse(number, System.Globalization.NumberStyles.HexNumber);
-                    return new NumericMathNode(new UnitDouble(val, UnitTypes.Hexadecimal, null, null));
-                }
-
                 return null;
             }
 
@@ -88,6 +84,22 @@ namespace dab.Library.MathParser
             }
 
             return new UnitUniLeafMathNode(valu, (hold == null ? UnitTypes.None : hold.UnitType), converter, tmpEnum);
+
+        }
+
+        private IMathNode isHex(string expression)
+        {
+            expression = expression.Trim();
+
+            // Probably formatted via 0x hex? Check for hex input
+            if (expression[0] == '0' && (expression[1] == 'x' || expression[1] == 'X'))
+            {
+                string number = expression.Substring(2);
+                var val = (decimal)int.Parse(number, System.Globalization.NumberStyles.HexNumber);
+                return new NumericMathNode(new UnitDouble(val, UnitTypes.Hexadecimal, null, null));
+            }
+
+            return null;
 
         }
 

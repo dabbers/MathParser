@@ -8,11 +8,9 @@ namespace dab.Library.MathParser
 {
     public enum CapacityDigitalUnits
     {
-        [UnitAbbreviation("b")]
         [UnitPlural("Bits")]
         [UnitType(UnitTypes.CapacityDigital)]
         Bit,
-        [UnitAbbreviation("B")]
         [UnitPlural("Bytes")]
         [UnitType(UnitTypes.CapacityDigital)]
         Byte,
