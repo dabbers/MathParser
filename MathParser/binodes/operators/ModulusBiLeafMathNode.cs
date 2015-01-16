@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace dab.Library.MathParser
 {
-    public class DivisionBiLeafMathNode : SymbolMathNode
+    public class ModulusBiLeafMathNode : SymbolMathNode
     {
-        public DivisionBiLeafMathNode(IMathNode left, IMathNode right)
-            : base(left, right, '/')
+        public ModulusBiLeafMathNode(IMathNode left, IMathNode right)
+            : base(left, right, '%')
         {
         }
 
@@ -26,7 +26,7 @@ namespace dab.Library.MathParser
                 throw new dab.Library.MathParser.DivideByZeroException();
             }
 
-            return left.Evaluate() / right.Evaluate();
+            return left.Evaluate() % right.Evaluate();
         }
     }
 }

@@ -30,9 +30,9 @@ namespace CalculateApi
             {
                 Response.Write("Math Parser Error: " + ex.Message);
             }
-            catch(Exception ex)
+            //catch(Exception ex)
             {
-                Response.Write("Exception: " + ex.Message);
+              //  Response.Write("Exception: " + ex.Message);
             }
         }
     }

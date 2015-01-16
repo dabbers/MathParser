@@ -1,0 +1,218 @@
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using dab.Library.MathParser;
+
+namespace dab.Library.UnitTests.MathParserUnitTest
+{
+    [TestClass]
+    public class ExpressionTests
+    {
+        MathParser.MathParser mp = new MathParser.MathParser("", "");
+
+        [TestMethod]
+        public void EmptyExpression()
+        {
+            Assert.AreEqual(0, mp.Evaluate("").Value);
+        }
+
+        [TestMethod]
+        public void OnePlusOne()
+        {
+            Assert.AreEqual(2, mp.Evaluate("1 + 1").Value);
+        }
+
+        [TestMethod]
+        public void SingleNumber()
+        {
+            Assert.AreEqual(45, mp.Evaluate("45").Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        public void InvalidSymbol()
+        {
+            Assert.AreEqual(45, mp.Evaluate("a").Value);
+        }
+
+        [TestMethod]
+        public void PI()
+        {
+            Assert.AreEqual((decimal)Math.PI, mp.Evaluate("PI").Value);
+        }
+
+        [TestMethod]
+        public void E()
+        {
+            Assert.AreEqual((decimal)Math.E, mp.Evaluate("E").Value);
+        }
+
+        [TestMethod]
+        public void OnePlusOneInParenthesis()
+        {
+            Assert.AreEqual(2, mp.Evaluate("(((1) + (1)))").Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        public void OnePlusOneInNonMatchingParenthesisLeft()
+        {
+            Assert.AreEqual(2, mp.Evaluate("((1) + (1)))").Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        public void OnePlusOneInNonMatchingParenthesisRight()
+        {
+            Assert.AreEqual(2, mp.Evaluate("((1) + (1)").Value);
+        }
+
+        [TestMethod]
+        public void Multiplication()
+        {
+            Assert.AreEqual(10, mp.Evaluate("2 * 5").Value);
+        }
+
+        [TestMethod]
+        public void SubtractionAndNegative()
+        {
+            Assert.AreEqual(-3, mp.Evaluate("2 - 5").Value);
+            Assert.AreEqual(3, mp.Evaluate("5 -2").Value);
+        }
+
+        [TestMethod]
+        public void Division()
+        {
+            Assert.AreEqual(2, mp.Evaluate("10 / 5").Value);
+            Assert.AreEqual(10M / 3M, mp.Evaluate("10 / 3").Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(MathParser.DivideByZeroException))]
+        public void DivisionByZero()
+        {
+            mp.Evaluate("1/0");
+        }
+
+        [TestMethod]
+        public void BitwiseOperators()
+        {
+            Assert.AreEqual(-2, mp.Evaluate("~1").Value);
+            Assert.AreEqual(3, mp.Evaluate("1 | 2").Value);
+            Assert.AreEqual(0, mp.Evaluate("1 & 2").Value);
+            Assert.AreEqual(4, mp.Evaluate("1 << 2").Value);
+            Assert.AreEqual(1, mp.Evaluate("2 >> 1").Value);
+        }
+
+        [TestMethod]
+        public void ModulusOperator()
+        {
+            Assert.AreEqual(1, mp.Evaluate("4 % 3").Value);
+        }
+
+        [TestMethod]
+        public void OrderOfOperation()
+        {
+            Assert.AreEqual(14, mp.Evaluate("4 + 5 * 2").Value);
+            Assert.AreEqual(18, mp.Evaluate("(4 + 5) * 2").Value);
+            Assert.AreEqual(36, mp.Evaluate("(4 + 5) * 2^2").Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        public void InvalidExpressionOperatorBefore()
+        {
+            mp.Evaluate("+ 1 1");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        public void InvalidExpressionOperatorAfter()
+        {
+            mp.Evaluate("1 1 +");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidArgumentAmount))]
+        public void InvalidExpressionOperatorAfter2()
+        {
+            mp.Evaluate("1 + 1 -");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        public void InvalidExpressionDoubleOperator()
+        {
+            mp.Evaluate("1 + * 2");
+        }
+
+        [TestMethod]
+        public void UsingNegativeSign()
+        {
+            Assert.AreEqual(0, mp.Evaluate("1 + - 1").Value);
+        }
+
+        [TestMethod]
+        public void UsingNegativeSignNoSpace()
+        {
+            Assert.AreEqual(0, mp.Evaluate("1 + -1").Value);
+        }
+
+        [TestMethod]
+        public void ValidFunctionParen()
+        {
+            Assert.AreEqual(4, mp.Evaluate("sqrt(16)").Value);
+            Assert.IsTrue(mp.GetInterpretation().StartsWith("Sqrt(16)"));
+        }
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        public void InvalidFunctionSpace()
+        {
+            Assert.AreEqual(4, mp.Evaluate("sqrt 16").Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        public void InvalidFunctionNoParamSeparator()
+        {
+            mp.Evaluate("sqrt16"); // not valid
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        public void InvalidFunction()
+        {
+            Assert.AreEqual(4, mp.Evaluate("sqrtt(16)").Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidFunctionArgument))]
+        public void InvalidFunctionNoParams()
+        {
+            Assert.AreEqual(4, mp.Evaluate("sqrtt()").Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        public void InvalidFunctionBrackets()
+        {
+            Assert.AreEqual(4, mp.Evaluate("sqrtt[16]").Value);
+        }
+
+        [TestMethod]
+        public void GetInterpretations()
+        {
+            mp.Evaluate("Sin(16)");
+            Assert.AreEqual("Sin(16)", mp.GetInterpretation());
+
+            mp.Evaluate("1 foot as inches");
+            Assert.AreEqual("(1 Foot) as Inch", mp.GetInterpretation());
+        }
+
+        [TestMethod]
+        public void GetLargeNumber()
+        {
+            Assert.AreEqual("1.100000E+016", mp.Evaluate("11000000000000000").ToString());
+
+        }
+    }
+}

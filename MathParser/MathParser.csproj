@@ -46,6 +46,7 @@
     <Compile Include="binodes\operators\BitwiseOrBiLeafMathNode.cs" />
     <Compile Include="binodes\operators\BitwiseShiftLeftBiLeafMathNode.cs" />
     <Compile Include="binodes\operators\BitwiseShiftRightBiLeafMathNode.cs" />
+    <Compile Include="binodes\operators\ModulusBiLeafMathNode.cs" />
     <Compile Include="binodes\operators\DivisionBiLeafMathNode.cs" />
     <Compile Include="binodes\operators\MultiplicationBiLeafMathNode.cs" />
     <Compile Include="OperatorFactory.cs" />
@@ -56,7 +57,6 @@
     <Compile Include="IMathNode.cs" />
     <Compile Include="MathParser.cs" />
     <Compile Include="RemoveOuterParens.cs" />
-    <Compile Include="SerializableDictionary.cs" />
     <Compile Include="uninodes\NumericMathNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="binodes\operators\SymbolMathNode.cs" />
@@ -67,6 +67,7 @@
     <Compile Include="uninodes\unioperators\ACosUniLeafMathNode.cs" />
     <Compile Include="uninodes\unioperators\SqrtUniLeafMathNode.cs" />
     <Compile Include="uninodes\unioperators\TanUniLeafMathNode.cs" />
+    <Compile Include="uninodes\unioperators\NegateUniLeafMathNode.cs" />
     <Compile Include="uninodes\unioperators\SinUniLeafMathNode.cs" />
     <Compile Include="uninodes\unioperators\CosUniLeafMathNode.cs" />
     <Compile Include="uninodes\unioperators\CoshUniLeafMathNode.cs" />
@@ -77,8 +78,9 @@
     <Compile Include="UnitFactory.cs" />
     <Compile Include="UnitTypes\CurrencyConverter.cs" />
     <Compile Include="UnitTypes\CapacityDigitalConverter.cs" />
-    <Compile Include="UnitTypes\RBOMBConverter.cs" />
+    <Compile Include="UnitTypes\TemperatureConverter.cs" />
     <Compile Include="UnitTypes\TimeConverter.cs" />
+    <Compile Include="UnitTypes\VolumeConverter.cs" />
     <Compile Include="UnitTypes\WeightConverter.cs" />
     <Compile Include="UnitTypes\DistanceConverter.cs" />
     <Compile Include="UnitTypes\UnitConverter.cs" />

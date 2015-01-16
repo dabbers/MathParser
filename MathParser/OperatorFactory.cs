@@ -37,6 +37,8 @@ namespace dab.Library.MathParser
                     return new BitwiseShiftLeftBiLeafMathNode(left, right);
                 case ">>":
                     return new BitwiseShiftRightBiLeafMathNode(left, right);
+                case "%":
+                    return new ModulusBiLeafMathNode(left, right);
                 default:
                     return null;
             }

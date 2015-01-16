@@ -16,8 +16,9 @@ namespace dab.Library.MathParser
                 new WeightConverter(),
                 new CapacityDigitalConverter(),
                 new CurrencyConverter(exchangeUrl, cachePath),
-                new RBOMBConverter(),
-                new TimeConverter()
+                new TimeConverter(),
+                new VolumeConverter(),
+                new TemperatureConverter()
             };
         }
 
@@ -107,20 +108,6 @@ namespace dab.Library.MathParser
         {
             Enum tmp;
             return converters.Where(p => p.GetUnitFromString(unit, out tmp)).FirstOrDefault();
-        }
-
-        public bool UnitsAreOfSameType(string unita, string unitb)
-        {
-            Enum tmp;
-            var a = converters.Where(p => p.GetUnitFromString(unita, out tmp)).First();
-            var b = converters.Where(p => p.GetUnitFromString(unitb, out tmp)).First();
-
-            return (a.GetType() == b.GetType());
-        }
-
-        public bool UnitsAreOfSameType(Enum unita, Enum unitb)
-        {
-            return UnitsAreOfSameType(unita.ToString(), unitb.ToString());
         }
     }
 }

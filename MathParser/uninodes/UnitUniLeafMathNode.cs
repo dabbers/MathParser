@@ -40,7 +40,7 @@ namespace dab.Library.MathParser
                 // Check to see if we're at least converting
                 if (val.Converter != this.converter)
                 {
-                    throw new UnexpectedUnitException(val.UnitType.ToString(), val.Unit.ToString());
+                    throw new UnexpectedUnitException(val.UnitType.ToString(), this.labelledUnit.ToString());
                 }
 
                 val.Reduce = false;

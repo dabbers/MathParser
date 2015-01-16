@@ -15,7 +15,15 @@ namespace dab.Library.MathParser
 
         public override UnitDouble Evaluate()
         {
-            return left.Evaluate() << (int)right.Evaluate().Value;
+            if (null == this.left || null == this.right) throw new dab.Library.MathParser.InvalidArgumentAmount("One or more required arguments are empty");
+            
+            var lft = left.Evaluate();
+            var rt = right.Evaluate();
+
+            if (rt.UnitType != lft.UnitType && rt.UnitType != UnitTypes.None) throw new UnitMismatchException(lft.UnitType.ToString(), rt.UnitType.ToString());
+
+
+            return lft << (int)rt.Value;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace dab.Library.MathParser
 
             for(int i = 0; i < expression.Length; i++)
             {
-                if (Char.IsLetterOrDigit(expression[i]))
+                if (Char.IsLetterOrDigit(expression[i]) || expression[i] == '~')
                 {
                     if (false == functiondone)
                     {

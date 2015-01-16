@@ -16,6 +16,8 @@ namespace dab.Library.MathParser
 
         public override UnitDouble Evaluate()
         {
+            if (null == this.left || null == this.right) throw new dab.Library.MathParser.InvalidArgumentAmount("One or more required arguments are empty");
+
             return left.Evaluate() * right.Evaluate();
         }
     }

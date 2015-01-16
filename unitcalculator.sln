@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathParser", "MathParser\MathParser.csproj", "{C8555901-6DD2-4DAB-9259-D83A3ED19B52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateApi", "CalculateApi\CalculateApi.csproj", "{4DCAD51A-4783-4478-9664-1DD36EFD3CDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathParserUnitTest", "MathParserUnitTest\MathParserUnitTest.csproj", "{397C6E8E-0A39-4AE8-A2F3-38F1A68DE2DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{4DCAD51A-4783-4478-9664-1DD36EFD3CDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DCAD51A-4783-4478-9664-1DD36EFD3CDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DCAD51A-4783-4478-9664-1DD36EFD3CDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{397C6E8E-0A39-4AE8-A2F3-38F1A68DE2DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{397C6E8E-0A39-4AE8-A2F3-38F1A68DE2DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{397C6E8E-0A39-4AE8-A2F3-38F1A68DE2DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{397C6E8E-0A39-4AE8-A2F3-38F1A68DE2DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

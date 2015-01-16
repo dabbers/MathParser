@@ -130,7 +130,7 @@ namespace dab.Library.MathParser
 
             int startPos = 0;
 
-            if (expression[0] == '-') startPos++;
+            if (expression[0] == '-' || expression[0] == '~') startPos++;
             int lastNonWhiteSpace = -1;
 
             // get first smallest operator and parse left and right
@@ -236,6 +236,10 @@ namespace dab.Library.MathParser
                             {
                                 return new MultiplicationBiLeafMathNode(new NumericMathNode(-1), this.Parse(expression.Substring(1)));
                             }
+                            else if (expression[0] == '~')
+                            {
+                                return new NegateUniLeafMathNode(this.Parse(expression.Substring(1)));
+                            }
 
                             //DistanceConverter.Convert()
                             throw new InvalidMathExpressionException(expression);
@@ -268,8 +272,8 @@ namespace dab.Library.MathParser
 
         private UniLeafFactory uniLeafFact = new UniLeafFactory();
         private OperatorFactory operFact = new OperatorFactory();
-        private Dictionary<string, short> operators = new Dictionary<string, short>() { { "|", 6 }, { "&", 8 },{ ">>", 7 }, { "<<", 6 }, { "+", 5 }, { "-", 4 }, { "/", 3 }, { "*", 2 }, { "^", 1 } };
-        private Dictionary<string, short> invalidPreceedingOperators = new Dictionary<string, short>() { { "|", 6 }, { "&", 8 }, { ">>", 7 }, { "<<", 6 }, { "+", 4 }, { "/", 3 }, { "*", 2 }, { "^", 1 } };
+        private Dictionary<string, short> operators = new Dictionary<string, short>() { { "%", 8 }, { "~", 7 }, { "|", 6 }, { "&", 8 }, { ">>", 7 }, { "<<", 6 }, { "+", 5 }, { "-", 4 }, { "/", 3 }, { "*", 2 }, { "^", 1 } };
+        private Dictionary<string, short> invalidPreceedingOperators = new Dictionary<string, short>() { { "%", 9 }, { "|", 6 }, { "&", 8 }, { ">>", 7 }, { "<<", 6 }, { "+", 4 }, { "/", 3 }, { "*", 2 }, { "^", 1 } };
     }
 
 #region Exceptions

@@ -151,6 +151,19 @@ namespace dab.Library.MathParser
 
             return new UnitDouble(left.Value / right.Value, unittype, unit, convert);
         }
+        public static UnitDouble operator %(UnitDouble left, UnitDouble right)
+        {
+            UnitConverter convert;
+            UnitTypes unittype;
+            Enum unit;
+
+            if (false == confirmCompatibleTypes(left, right, out convert, out unittype, out unit))
+            {
+                throw new UnitMismatchException(left.UnitType.ToString(), right.UnitType.ToString());
+            }
+
+            return new UnitDouble(left.Value % right.Value, unittype, unit, convert);
+        }
         public static UnitDouble operator *(UnitDouble left, UnitDouble right)
         {
             UnitConverter convert;
@@ -196,10 +209,7 @@ namespace dab.Library.MathParser
             UnitTypes unittype;
             Enum unit;
 
-            if (false == confirmCompatibleTypes(left, null, out convert, out unittype, out unit))
-            {
-                throw new UnitMismatchException(left.UnitType.ToString(), String.Empty);
-            }
+            confirmCompatibleTypes(left, null, out convert, out unittype, out unit);
 
             return new UnitDouble((decimal)((int)left.Value << right), unittype, unit, convert);
         }
@@ -209,10 +219,7 @@ namespace dab.Library.MathParser
             UnitTypes unittype;
             Enum unit;
 
-            if (false == confirmCompatibleTypes(left, null, out convert, out unittype, out unit))
-            {
-                throw new UnitMismatchException(left.UnitType.ToString(), String.Empty);
-            }
+            confirmCompatibleTypes(left, null, out convert, out unittype, out unit);
 
             return new UnitDouble((decimal)((int)left.Value >> right), unittype, unit, convert);
         }
@@ -222,10 +229,7 @@ namespace dab.Library.MathParser
             UnitTypes unittype;
             Enum unit;
 
-            if (false == confirmCompatibleTypes(left, null, out convert, out unittype, out unit))
-            {
-                throw new UnitMismatchException(left.UnitType.ToString(), String.Empty);
-            }
+            confirmCompatibleTypes(left, null, out convert, out unittype, out unit);
 
             return new UnitDouble((decimal)(~(int)left.Value), unittype, unit, convert);
         }
@@ -272,6 +276,9 @@ namespace dab.Library.MathParser
 
         SpeedMetric,
         SpeedImperical,
+
+        VolumeMetric,
+        VolumeImperical,
         
         Degrees,
         Radians,

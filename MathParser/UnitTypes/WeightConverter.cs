@@ -25,6 +25,7 @@ namespace dab.Library.MathParser
         [UnitPlural("Micrograms")]
         [UnitType(UnitTypes.WeightMetric)]
         Microgram,
+        [UnitAbbreviation("lb")]
         [UnitAbbreviation("lbs")]
         [UnitPlural("Pounds")]
         [UnitType(UnitTypes.WeightImperical)]
