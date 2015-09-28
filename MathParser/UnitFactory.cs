@@ -25,7 +25,7 @@ namespace dab.Library.MathParser
         // Breaks up the expression into either a conversion of (expr) to unit or (exp) unit or unit(exp) with whitespace optional.
         private static Regex unitParser = new Regex
         (
-            @"^(?:(?<value>.+)\s+(?:to|as)\s+(?<to>[A-z$€£฿]+)|(?<value>(?!\s(?:to|as)\s).+?)\s*(?<from>[A-z$€£฿]+)|(?<from>[$€£฿])\s*(?<value>(?!\s(?:to|as)\s).+?))$"
+            @"^(?:(?<value>.+)\s+(?:to|as|in)\s+(?<to>[A-z$€£฿]+)|(?<value>(?!\s(?:to|as)\s).+?)\s*(?<from>[A-z$€£฿]+)|(?<from>[$€£฿])\s*(?<value>(?!\s(?:to|as)\s).+?))$"
         );
 
         private UnitConverter[] converters;

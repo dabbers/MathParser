@@ -214,5 +214,23 @@ namespace dab.Library.UnitTests.MathParserUnitTest
             Assert.AreEqual("1.100000E+016", mp.Evaluate("11000000000000000").ToString());
 
         }
+
+        [TestMethod]
+        public void UsingInForConversion()
+        {
+            Assert.AreEqual("3,600 Seconds", mp.Evaluate("1 hour in seconds").ToString());
+        }
+
+        [TestMethod]
+        public void CheckInConversionAndInchDontCollid()
+        {
+            Assert.AreEqual("12 Inches", mp.Evaluate("1 foot in in").ToString());
+        }
+
+        [TestMethod]
+        public void RegressionTestForInchesAndInConversion()
+        {
+            Assert.AreEqual("12 Inches", mp.Evaluate("1 foot to in").ToString());
+        }
     }
 }
