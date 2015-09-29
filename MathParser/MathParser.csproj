@@ -78,6 +78,7 @@
     <Compile Include="UnitFactory.cs" />
     <Compile Include="UnitTypes\CurrencyConverter.cs" />
     <Compile Include="UnitTypes\CapacityDigitalConverter.cs" />
+    <Compile Include="UnitTypes\NumericBaseConverter.cs" />
     <Compile Include="UnitTypes\TemperatureConverter.cs" />
     <Compile Include="UnitTypes\TimeConverter.cs" />
     <Compile Include="UnitTypes\VolumeConverter.cs" />

@@ -16,6 +16,12 @@ namespace MathParserUnitTest
         }
 
         [TestMethod]
+        public void HexAsDecimal()
+        {
+            Assert.AreEqual("1", mp.Evaluate("0x1 as decimal").ToString());
+        }
+
+        [TestMethod]
         public void HexPlusNumber()
         {
             Assert.AreEqual(0x1 + 2, mp.Evaluate("0x1 + 2").Value);
@@ -31,6 +37,40 @@ namespace MathParserUnitTest
         public void HexPlusNumberString()
         {
             Assert.AreEqual("0x2", mp.Evaluate("1 + 0x1").ToString());
+        }
+
+        [TestMethod]
+        public void OctalTest1()
+        {
+            // 10 + 13 = 23
+            Assert.AreEqual("027", mp.Evaluate("012 + 015").ToString());
+        }
+
+        [TestMethod]
+        public void OctalPlusHex()
+        {
+            // 10 + 13 = 23
+            Assert.AreEqual("013", mp.Evaluate("012 + 0x1").ToString());
+        }
+
+        [TestMethod]
+        public void HexPlusOct()
+        {
+            // 10 + 13 = 23
+            Assert.AreEqual("0xB", mp.Evaluate("0x1 + 012").ToString());
+        }
+
+        [TestMethod]
+        public void OctTestConvertHex()
+        {
+            // 10 + 13 = 23
+            Assert.AreEqual("0x17", mp.Evaluate("(012 + 015) as Hex").ToString());
+        }
+
+        [TestMethod]
+        public void HexPlusHexAsEcimal()
+        {
+            Assert.AreEqual("2", mp.Evaluate("(0x1 + 0x1) as Decimal").ToString());
         }
 
         // TODO: Fix this test. Allow capacity digital to be represented as hex.

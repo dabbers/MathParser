@@ -18,7 +18,8 @@ namespace dab.Library.MathParser
                 new CurrencyConverter(exchangeUrl, cachePath),
                 new TimeConverter(),
                 new VolumeConverter(),
-                new TemperatureConverter()
+                new TemperatureConverter(),
+                new NumericBaseConverter()
             };
         }
 
@@ -32,7 +33,7 @@ namespace dab.Library.MathParser
 
         public IMathNode TryParse(string expression, MathParser parser)
         {
-            var possiblyhex = this.isHex(expression);
+            var possiblyhex = this.isSpeicalFormattedNumber(expression);
             if (possiblyhex != null)
             {
                 return possiblyhex;
@@ -88,16 +89,30 @@ namespace dab.Library.MathParser
 
         }
 
-        private IMathNode isHex(string expression)
+        private IMathNode isSpeicalFormattedNumber(string expression)
         {
             expression = expression.Trim();
 
             // Probably formatted via 0x hex? Check for hex input
             if (expression[0] == '0' && (expression[1] == 'x' || expression[1] == 'X'))
             {
-                string number = expression.Substring(2);
-                var val = (decimal)int.Parse(number, System.Globalization.NumberStyles.HexNumber);
-                return new NumericMathNode(new UnitDouble(val, UnitTypes.Hexadecimal, null, null));
+                try
+                {
+                    string number = expression.Substring(2);
+                    var val = (decimal)int.Parse(number, System.Globalization.NumberStyles.HexNumber);
+                    return new NumericMathNode(new UnitDouble(val, UnitTypes.Hexadecimal, NumericBaseUnits.Hexadecimal, new NumericBaseConverter()));
+                }
+                catch { }
+
+            }
+            if (expression[0] == '0')
+            {
+                try
+                {
+                    var val = (decimal)Convert.ToInt64(expression, 8);
+                    return new NumericMathNode(new UnitDouble(val, UnitTypes.Octal, NumericBaseUnits.Octal, new NumericBaseConverter()));
+                }
+                catch { }
             }
 
             return null;

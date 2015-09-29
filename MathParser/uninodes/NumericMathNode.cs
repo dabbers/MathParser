@@ -32,6 +32,11 @@ namespace dab.Library.MathParser
             {
                 return "0x"+((int)((UnitDouble)this.Value).Value).ToString("X");
             }
+            else if (((UnitDouble)this.Value).UnitType == UnitTypes.Octal)
+            {
+                return "0" + Convert.ToString(((int)((UnitDouble)this.Value).Value), 8);
+            }
+
             string number = ((UnitDouble)this.Value).Value.ToString();
             // In case I need to manipulate it somehow in the future
             return number;

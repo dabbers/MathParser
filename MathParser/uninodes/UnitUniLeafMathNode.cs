@@ -77,6 +77,10 @@ namespace dab.Library.MathParser
                 {
                     number = ((int)this.converter.Convert(((UnitDouble)numeric.Value).Value, this.converter.BaseUnit, this.labelledUnit)).ToString("X");
                 }
+                else if (UnitTypes.Octal == numeric.UnitType)
+                {
+                    number = "0" + Convert.ToString(((int)this.converter.Convert(((UnitDouble)numeric.Value).Value, this.converter.BaseUnit, this.labelledUnit)), 8);
+                }
                 else
                 {
                     number = this.converter.Convert(((UnitDouble)numeric.Value).Value, this.converter.BaseUnit, this.labelledUnit).ToString("###,###,###,###,##0.############");

@@ -156,6 +156,17 @@ namespace dab.Library.MathParser
         }
     }
 
+
+    public sealed class DisplayAttribute : Attribute
+    {
+        public string Display { get; private set; }
+
+        public DisplayAttribute(string display)
+        {
+            this.Display = display;
+        }
+    }
+
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public sealed class UnitPluralAttribute : Attribute
     {

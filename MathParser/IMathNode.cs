@@ -88,6 +88,10 @@ namespace dab.Library.MathParser
             {
                 return "0x" + ((int)value.Value).ToString("X");
             }
+            else if (value.UnitType == UnitTypes.Octal)
+            {
+                return "0" + Convert.ToString(((int)value.Value), 8);
+            }
 
             value.Value = Math.Round(value.Value, 6);
             string unitlabel = String.Empty;
@@ -95,6 +99,7 @@ namespace dab.Library.MathParser
             if (this.Converter != null)
             {
                 unitlabel = value.Unit.ToString();
+
 
                 if (value.Value != 1)
                 {
@@ -104,9 +109,17 @@ namespace dab.Library.MathParser
                         unitlabel = temp.Plural;
                     }
                 }
+                else
+                {
+                    var templbl = value.Unit.GetAttributeOfType<DisplayAttribute>().FirstOrDefault();
+                    if (templbl != null)
+                    {
+                        unitlabel = templbl.Display;
+                    }
+                }
             }
 
-            return value.Value.ToString(formatting) + (this.Converter != null ? " " + unitlabel : "");
+            return value.Value.ToString(formatting) + (this.Converter != null ? " " + unitlabel : "").Trim();
         }
 
         #region Operators
@@ -270,6 +283,8 @@ namespace dab.Library.MathParser
         Currency,
 
         Hexadecimal,
+        Decimal,
+        Octal,
 
         Time,
 

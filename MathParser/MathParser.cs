@@ -204,8 +204,8 @@ namespace dab.Library.MathParser
             if (oppos == -1)
             {
                 decimal dbl;
-
-                if (decimal.TryParse(expression.Trim(), out dbl))
+                // We want to do octal parsing later on, so check this isn't an octal #. Otherwise, verify it's a decimal or 0.
+                if ((expression[0] != '0' || expression.Length == 1 || expression[1] == '0' || expression[1] == '.') && decimal.TryParse(expression.Trim(), out dbl))
                 {
                     return new NumericMathNode(dbl);
                 }
