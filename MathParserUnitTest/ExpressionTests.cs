@@ -15,6 +15,15 @@ namespace dab.Library.UnitTests.MathParserUnitTest
             Assert.AreEqual(0, mp.Evaluate("").Value);
         }
 
+
+        [TestMethod]
+        public void GetInterpretationExpression()
+        {
+            var eval = mp.Evaluate("Sin(ASin(Tan(Atan(Cos(acos((sqrt(4)^2)/4))))))");
+
+            Assert.AreEqual("Sin(ASin(Tan(ATan(Cos(ACos((Sqrt(4) ^ 2) / 4))))))", mp.GetInterpretation());
+        }
+
         [TestMethod]
         public void OnePlusOne()
         {
@@ -31,7 +40,16 @@ namespace dab.Library.UnitTests.MathParserUnitTest
         [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
         public void InvalidSymbol()
         {
-            Assert.AreEqual(45, mp.Evaluate("a").Value);
+            try
+            {
+                Assert.AreEqual(45, mp.Evaluate("a").Value);
+            }
+            catch (InvalidMathExpressionException ex)
+            {
+                Assert.AreEqual("The following math expression is invalid: a", ex.Message);
+                throw;
+            }
+            
         }
 
         [TestMethod]
@@ -101,6 +119,26 @@ namespace dab.Library.UnitTests.MathParserUnitTest
             Assert.AreEqual(0, mp.Evaluate("1 & 2").Value);
             Assert.AreEqual(4, mp.Evaluate("1 << 2").Value);
             Assert.AreEqual(1, mp.Evaluate("2 >> 1").Value);
+        }
+
+        [TestMethod]
+        public void BitwiseOperatorsDisplay()
+        {
+            Assert.AreEqual("-2", mp.Evaluate("~1").ToString());
+            Assert.AreEqual("3", mp.Evaluate("1 | 2").ToString());
+            Assert.AreEqual("0", mp.Evaluate("1 & 2").ToString());
+            Assert.AreEqual("4", mp.Evaluate("1 << 2").ToString());
+            Assert.AreEqual("1", mp.Evaluate("2 >> 1").ToString());
+        }
+
+        [TestMethod]
+        public void BitwiseOperatorsInterpretationDisplay()
+        {
+            Assert.AreEqual("~(1)", mp.GetInterpretation("~1"));
+            Assert.AreEqual("1 | 2", mp.GetInterpretation("1 | 2"));
+            Assert.AreEqual("1 & 2", mp.GetInterpretation("1 & 2"));
+            Assert.AreEqual("1 << 2", mp.GetInterpretation("1 << 2"));
+            Assert.AreEqual("2 >> 1", mp.GetInterpretation("2 >> 1"));
         }
 
         [TestMethod]

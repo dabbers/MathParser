@@ -79,7 +79,7 @@ namespace dab.Library.MathParser
 
         public string GetInterpretation(string expression)
         {
-            this.Parse(expression);
+            this.Root = this.Parse(expression);
             return this.GetInterpretation();
         }
 

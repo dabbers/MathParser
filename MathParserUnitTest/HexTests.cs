@@ -84,7 +84,7 @@ namespace MathParserUnitTest
 
         // Todo: Redirect exception into our own MathParser Hex Format Exception
         [TestMethod]
-        [ExpectedException(typeof(System.FormatException))]
+        [ExpectedException(typeof(InvalidMathExpressionException))]
         public void InvalidHex()
         {
             Assert.AreEqual(0x1 + 1, mp.Evaluate("0xZ04 + 1").Value);

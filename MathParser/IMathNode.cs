@@ -71,7 +71,7 @@ namespace dab.Library.MathParser
                 value.Unit = value.DesiredUnit;
             }
 
-            string formatting = "###,###,###,###,##0.############";
+            string formatting = "###,###,###,###,##0.############ ";
 
             if (Reduce && value.Value > 10000000000000000)
             {
@@ -80,7 +80,7 @@ namespace dab.Library.MathParser
             
             if (value.UnitType == UnitTypes.Currency)
             {
-                formatting = "###,###,###,###,##0.############;-###,###,###,###,##0.############";
+                formatting = "###,###,###,###,##0.############ ;-###,###,###,###,##0.############ ";
                 value.Value = Math.Round(value.Value, 2);
             }
 
@@ -103,23 +103,24 @@ namespace dab.Library.MathParser
 
                 if (value.Value != 1)
                 {
-                    var temp = value.Unit.GetAttributeOfType<UnitPluralAttribute>().FirstOrDefault();
+                    var temp = value.Unit.GetAttributeOfType<UnitPluralAttribute>();
+
                     if (temp != null)
                     {
-                        unitlabel = temp.Plural;
+                        unitlabel = temp.FirstOrDefault().Plural;
                     }
                 }
                 else
                 {
-                    var templbl = value.Unit.GetAttributeOfType<DisplayAttribute>().FirstOrDefault();
+                    var templbl = value.Unit.GetAttributeOfType<DisplayAttribute>();
                     if (templbl != null)
                     {
-                        unitlabel = templbl.Display;
+                        unitlabel = templbl.FirstOrDefault().Display;
                     }
                 }
             }
 
-            return value.Value.ToString(formatting) + (this.Converter != null ? " " + unitlabel : "").Trim();
+            return (value.Value.ToString(formatting) + (this.Converter != null ? unitlabel : "")).Trim();
         }
 
         #region Operators

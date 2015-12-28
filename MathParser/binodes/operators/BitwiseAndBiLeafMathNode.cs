@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dab.Library.MathParser
 {
-    class BitwiseAndBiLeafMathNode : SymbolMathNode
+    public class BitwiseAndBiLeafMathNode : SymbolMathNode
     {
         public BitwiseAndBiLeafMathNode(IMathNode left, IMathNode right)
             : base(left, right, '&')

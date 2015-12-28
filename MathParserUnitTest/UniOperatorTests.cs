@@ -13,6 +13,7 @@ namespace MathParserUnitTest
         public void ACosUnitTestValid()
         {
             Assert.AreEqual((decimal)Math.Acos(.001), mp.Evaluate("Acos(.001)").Value);
+            Assert.AreEqual("1.569796", mp.Evaluate("Acos(.001)").ToString());
         }
 
         [TestMethod]
@@ -28,6 +29,8 @@ namespace MathParserUnitTest
             var result = mp.Evaluate("Asin(.001)");
 
             Assert.AreEqual((decimal)Math.Asin(.001), result.Value);
+
+            Assert.AreEqual("0.001", result.ToString());
         }
 
         [TestMethod]
@@ -41,6 +44,7 @@ namespace MathParserUnitTest
         public void ATanUnitTestValid()
         {
             Assert.AreEqual((decimal)Math.Atan(.001), mp.Evaluate("ATan(.001)").Value);
+            Assert.AreEqual("0.001", mp.Evaluate("ATan(.001)").ToString());
         }
 
         [TestMethod]
