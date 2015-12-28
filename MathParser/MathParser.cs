@@ -179,7 +179,7 @@ namespace dab.Library.MathParser
 
                 opval = this.operators[searchop];
 
-                if (parens != 0 || lowestop > opval)
+                if (parens != 0 || lowestop >= opval)
                 {
                     // check for a - sign after this just in case.
                     if (expression[pos + 1] != '-')
@@ -199,7 +199,6 @@ namespace dab.Library.MathParser
                 throw new InvalidMathExpressionException(expression);
             }
 
-            //expression = expression.Trim();
             // No opperator was found, we are parsing something else
             if (oppos == -1)
             {
@@ -241,7 +240,6 @@ namespace dab.Library.MathParser
                                 return new NegateUniLeafMathNode(this.Parse(expression.Substring(1)));
                             }
 
-                            //DistanceConverter.Convert()
                             throw new InvalidMathExpressionException(expression);
                         }
                     }
@@ -262,8 +260,6 @@ namespace dab.Library.MathParser
                     left = expression[0].ToString();
                 }
 
-                //string smbl = expression[oppos].ToString();
-
                 string right = expression.Substring(oppos + 1 + oplength, expression.Length - oppos - 1 - oplength);
 
                 return operFact.CreateOperatorNode(symbol, this.parse(left), this.parse(right));
@@ -272,7 +268,7 @@ namespace dab.Library.MathParser
 
         private UniLeafFactory uniLeafFact = new UniLeafFactory();
         private OperatorFactory operFact = new OperatorFactory();
-        private Dictionary<string, short> operators = new Dictionary<string, short>() { { "%", 8 }, { "~", 7 }, { "|", 6 }, { "&", 8 }, { ">>", 7 }, { "<<", 6 }, { "+", 5 }, { "-", 4 }, { "/", 3 }, { "*", 2 }, { "^", 1 } };
+        private Dictionary<string, short> operators = new Dictionary<string, short>() { { "%", 8 }, { "~", 7 }, { "|", 6 }, { "&", 8 }, { ">>", 7 }, { "<<", 6 }, { "+", 5 }, { "-", 4 }, { "/", 3 }, { "*", 3 }, { "^", 1 } };
         private Dictionary<string, short> invalidPreceedingOperators = new Dictionary<string, short>() { { "%", 9 }, { "|", 6 }, { "&", 8 }, { ">>", 7 }, { "<<", 6 }, { "+", 4 }, { "/", 3 }, { "*", 2 }, { "^", 1 } };
     }
 

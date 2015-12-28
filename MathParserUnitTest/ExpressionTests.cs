@@ -115,6 +115,13 @@ namespace dab.Library.UnitTests.MathParserUnitTest
             Assert.AreEqual(14, mp.Evaluate("4 + 5 * 2").Value);
             Assert.AreEqual(18, mp.Evaluate("(4 + 5) * 2").Value);
             Assert.AreEqual(36, mp.Evaluate("(4 + 5) * 2^2").Value);
+
+            // Test for left to right operation of similiar valued operations
+            Assert.AreEqual(116, mp.Evaluate("123-4-8+5").Value);
+            Assert.AreEqual(106, mp.Evaluate("123-4-8-5").Value);
+            Assert.AreEqual(124, mp.Evaluate("123+4-8+5").Value);
+            Assert.AreEqual(((decimal)49.20), mp.Evaluate("123/4*8/5").Value);
+            Assert.AreEqual(((decimal)307.5), mp.Evaluate("123*4/8*5").Value);
         }
 
         [TestMethod]
