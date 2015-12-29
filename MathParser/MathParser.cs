@@ -23,11 +23,6 @@ namespace dab.Library.MathParser
         public GetValueOfVariable GetValueOfVariable { get; set; }
 
         /// <summary>
-        /// Stores all the possible symbols that have a value
-        /// </summary>
-        public IDictionary<string, decimal> Symbols { get { return this.symbols; } }
-
-        /// <summary>
         /// Store a list of variables that are referenced in the expression.
         /// </summary>
         public List<string> Variables { get; set; }
@@ -179,13 +174,10 @@ namespace dab.Library.MathParser
 
                 opval = this.operators[searchop];
 
-                if (parens != 0 || lowestop >= opval)
+                // check for a - sign after this just in case.
+                if ((parens != 0 || lowestop >= opval) && expression[pos + 1] != '-')
                 {
-                    // check for a - sign after this just in case.
-                    if (expression[pos + 1] != '-')
-                    {
-                        continue;
-                    }
+                    continue;
                 }
 
                 lowestop = opval;

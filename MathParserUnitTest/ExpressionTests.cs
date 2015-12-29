@@ -47,6 +47,7 @@ namespace dab.Library.UnitTests.MathParserUnitTest
             catch (InvalidMathExpressionException ex)
             {
                 Assert.AreEqual("The following math expression is invalid: a", ex.Message);
+                Assert.AreEqual("a", ex.Expression);
                 throw;
             }
             
