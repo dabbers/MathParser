@@ -52,7 +52,7 @@ namespace dab.Library.MathParser
     public class CapacityDigitalConverter : UnitConverter
     {
 
-        public override Enum BaseUnit { get { return CapacityDigitalUnits.Bit; } }
+        public override Enum BaseUnit { get { return CapacityDigitalUnits.Byte; } }
 
         /// <summary>
         /// Maps Meter to other distances. Meter can be considered the base unit
@@ -62,15 +62,15 @@ namespace dab.Library.MathParser
         public CapacityDigitalConverter()
         {
             conversionMap.Add(CapacityDigitalUnits.Bit, 1);
-            conversionMap.Add(CapacityDigitalUnits.Byte, 8);
-            conversionMap.Add(CapacityDigitalUnits.Kilobyte, 8 * 1024);
-            conversionMap.Add(CapacityDigitalUnits.Megabyte, 8 * 1024 * 1024);
-            conversionMap.Add(CapacityDigitalUnits.Gigabyte, 8 * (long)1024 * 1024 * 1024);
-            conversionMap.Add(CapacityDigitalUnits.Terabyte, 8 * (long)1024 * 1024 * 1024 * 1024);
-            conversionMap.Add(CapacityDigitalUnits.Petabyte, 8 * (long)1024 * 1024 * 1024 * 1024 * 1024);
-            conversionMap.Add(CapacityDigitalUnits.Exabyte, 8 * (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024);
-            conversionMap.Add(CapacityDigitalUnits.Zettabyte, 8 * (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024);
-            conversionMap.Add(CapacityDigitalUnits.Yottabyte, 8 * (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024);
+            conversionMap.Add(CapacityDigitalUnits.Byte, 1);
+            conversionMap.Add(CapacityDigitalUnits.Kilobyte, 1024);
+            conversionMap.Add(CapacityDigitalUnits.Megabyte, 1024 * 1024);
+            conversionMap.Add(CapacityDigitalUnits.Gigabyte, (long)1024 * 1024 * 1024);
+            conversionMap.Add(CapacityDigitalUnits.Terabyte, (long)1024 * 1024 * 1024 * 1024);
+            conversionMap.Add(CapacityDigitalUnits.Petabyte, (long)1024 * 1024 * 1024 * 1024 * 1024);
+            conversionMap.Add(CapacityDigitalUnits.Exabyte, (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024);
+            conversionMap.Add(CapacityDigitalUnits.Zettabyte, (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024);
+            conversionMap.Add(CapacityDigitalUnits.Yottabyte, (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024);
         }
 
         /// <summary>
@@ -95,9 +95,19 @@ namespace dab.Library.MathParser
             value *= conversion;
 
             // Convert meter to to.
-            if (!conversionMap.TryGetValue(toDu, out conversion))
+            if (toDu != CapacityDigitalUnits.Bit && !conversionMap.TryGetValue(toDu, out conversion))
             {
                 throw new InvalidUnitTypeException(toDu.ToString());
+            }
+
+            // Handle converting to/from bits
+            if (fromDu == CapacityDigitalUnits.Bit && toDu != CapacityDigitalUnits.Bit)
+            {
+                conversion = 8;
+            }
+            else if (fromDu != CapacityDigitalUnits.Bit && toDu == CapacityDigitalUnits.Bit)
+            {
+                conversion = (decimal)1 / 8;
             }
 
             return value / conversion;
