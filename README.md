@@ -27,5 +27,8 @@ The .GetInterpretation() fetches the interpretation for the most recently parsed
 If you find a math bug, please file a new issue with the input query, the output of both GetInterpretation and res.ToString(). Then provide the expected result .
 
 
+The res.value property is the value of the result in the base unit. For digital capacity (TB to gb to mb etc) that is in bytes. I suppose it makes sense to request the value in its reduced form. That's a todo feature :).
+
+
 
 Hopefully this is useful to people!
