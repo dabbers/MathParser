@@ -29,6 +29,6 @@ If you find a math bug, please file a new issue with the input query, the output
 
 The res.value property is the value of the result in the base unit. For digital capacity (TB to gb to mb etc) that is in bytes. I suppose it makes sense to request the value in its reduced form. That's a todo feature :).
 
-
+One nice thing about this library, is it has no external dependencies. It should work just fine on Mono (untested), and doesn't use anything particularly fancy from .net (maybe some LINQ, but I don't know). It should work with most .net versions. 
 
 Hopefully this is useful to people!
