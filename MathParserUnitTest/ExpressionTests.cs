@@ -278,5 +278,13 @@ namespace dab.Library.UnitTests.MathParserUnitTest
         {
             Assert.AreEqual("12 Inches", mp.Evaluate("1 foot to in").ToString());
         }
+        [TestMethod]
+        public void TestIntegerOverUnderFlowBitShift()
+        {
+            Assert.AreEqual("4,294,967,296", mp.Evaluate("1 << 32").ToString());
+            Assert.AreEqual("0", mp.Evaluate("1 >> 32").ToString());
+            Assert.AreEqual("-9,223,372,036,854,775,808", mp.Evaluate("1 << 2147483647").ToString());
+            Assert.AreEqual("0", mp.Evaluate("1 >> 2147483647").ToString());
+        }
     }
 }

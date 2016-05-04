@@ -202,7 +202,7 @@ namespace dab.Library.MathParser
                 throw new UnitMismatchException(left.UnitType.ToString(), right.UnitType.ToString());
             }
 
-            return new UnitDouble((decimal)((int)left.Value & (int)right.Value), unittype, unit, convert);
+            return new UnitDouble((decimal)((long)left.Value & (long)right.Value), unittype, unit, convert);
         }
         public static UnitDouble operator |(UnitDouble left, UnitDouble right)
         {
@@ -215,7 +215,7 @@ namespace dab.Library.MathParser
                 throw new UnitMismatchException(left.UnitType.ToString(), right.UnitType.ToString());
             }
 
-            return new UnitDouble((decimal)((int)left.Value | (int)right.Value), unittype, unit, convert);
+            return new UnitDouble((decimal)((long)left.Value | (long)right.Value), unittype, unit, convert);
         }
         public static UnitDouble operator <<(UnitDouble left, int right)
         {
@@ -225,7 +225,7 @@ namespace dab.Library.MathParser
 
             confirmCompatibleTypes(left, null, out convert, out unittype, out unit);
 
-            return new UnitDouble((decimal)((int)left.Value << right), unittype, unit, convert);
+            return new UnitDouble((decimal)((long)left.Value << right), unittype, unit, convert);
         }
         public static UnitDouble operator >>(UnitDouble left, int right)
         {
@@ -235,7 +235,7 @@ namespace dab.Library.MathParser
 
             confirmCompatibleTypes(left, null, out convert, out unittype, out unit);
 
-            return new UnitDouble((decimal)((int)left.Value >> right), unittype, unit, convert);
+            return new UnitDouble((decimal)((long)left.Value >> right), unittype, unit, convert);
         }
         public static UnitDouble operator ~(UnitDouble left)
         {
@@ -245,7 +245,7 @@ namespace dab.Library.MathParser
 
             confirmCompatibleTypes(left, null, out convert, out unittype, out unit);
 
-            return new UnitDouble((decimal)(~(int)left.Value), unittype, unit, convert);
+            return new UnitDouble((decimal)(~(long)left.Value), unittype, unit, convert);
         }
         #endregion
 
