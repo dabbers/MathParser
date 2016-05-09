@@ -58,6 +58,7 @@
     <Compile Include="Unit Type Tests\CapacityDigitalTests.cs" />
     <Compile Include="Unit Type Tests\CurrencyTests.cs" />
     <Compile Include="Unit Type Tests\DistanceTests.cs" />
+    <Compile Include="Unit Type Tests\StringTest.cs" />
     <Compile Include="Unit Type Tests\TempTests.cs" />
     <Compile Include="Unit Type Tests\TimeTests.cs" />
     <Compile Include="Unit Type Tests\VolumeTest.cs" />

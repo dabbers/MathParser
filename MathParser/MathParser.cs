@@ -231,6 +231,10 @@ namespace dab.Library.MathParser
                             {
                                 return new NegateUniLeafMathNode(this.Parse(expression.Substring(1)));
                             }
+                            else if (expression[0] == '"' && expression.Last() == '"')
+                            {
+                                return new StringMathNode(expression.Substring(1, expression.Length - 2));
+                            }
 
                             throw new InvalidMathExpressionException(expression);
                         }

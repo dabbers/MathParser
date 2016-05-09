@@ -94,8 +94,15 @@ namespace dab.Library.MathParser
                 }
             }
 
-            result = (Enum)Enum.Parse(BaseUnit.GetType(), "Unknown");
-
+            try
+            {
+                result = (Enum)Enum.Parse(BaseUnit.GetType(), "Unknown");
+            }
+            catch(ArgumentException)
+            {
+                result = null;
+            }
+            
             return false;
         }
 

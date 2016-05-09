@@ -54,6 +54,20 @@ namespace dab.Library.MathParser
             // Continue parsing the left side of this Unit declaration
             // If this is a conversion, this will come back here until there
             // are no more units left to parse through
+            
+            // Check for " " to indicate a string literal.
+            //if (expr.Value.Contains('"'))
+            //{
+            //    // Otherwise, we are parsing a complex expression
+            //    var valu = parser.Parse(expr.Value);
+            //}
+            //else
+            //{
+            //    // Otherwise, we are parsing a complex expression
+            //    var valu = parser.Parse(expr.Value);
+            //}
+
+            // Otherwise, we are parsing a complex expression
             var valu = parser.Parse(expr.Value);
 
 
@@ -71,7 +85,13 @@ namespace dab.Library.MathParser
 
             if (converter == null)
             {
-                throw new InvalidUnitTypeException(actionable.Value);
+                if (actionable.Value.ToLower() != "string" && actionable.Value.ToLower() != "str")
+                {
+                    throw new InvalidUnitTypeException(actionable.Value);
+                }
+
+                // Convert the int/long/hex value into a string/char.
+                return new StringMathNode(valu);
             }
 
 
