@@ -40,6 +40,12 @@ namespace MathParserUnitTest.Unit_Type_Tests
         }
 
         [TestMethod]
+        public void DistanceCommaSeparatedMetricToImperialConvert()
+        {
+            Assert.AreEqual("0.62137 Miles", mp.Evaluate("1,000 meters to miles").ToString());
+        }
+
+        [TestMethod]
         public void DistanceCheckReduceProperConvert()
         {
             Assert.AreEqual("1.999976 Yards", mp.Evaluate("2 feet + 4 foot").ToString());

@@ -120,7 +120,7 @@ namespace dab.Library.MathParser
             // Check for misplaced operators ( + - / * ^ )
             if (this.invalidPreceedingOperators.Keys.Contains(expression[0].ToString()) || this.invalidPreceedingOperators.Keys.Contains(expression.Last().ToString()))
             {
-                throw new InvalidMathExpressionException(expression);
+                throw new InvalidOperatorException(expression[0], expression);
             }
 
             int startPos = 0;
@@ -169,7 +169,7 @@ namespace dab.Library.MathParser
 
                 if (this.invalidPreceedingOperators.ContainsKey(searchop) && this.operators.ContainsKey(expression[pos - 1].ToString()))
                 {
-                    throw new InvalidMathExpressionException("OP: " + expression);
+                    throw new InvalidOperatorException(searchop[0], expression);
                 }
 
                 opval = this.operators[searchop];
@@ -363,23 +363,6 @@ namespace dab.Library.MathParser
 
     }
 
-    public class MissingVariableException : MathParserException
-    {
-        public MissingVariableException(string variable)
-            : base(String.Format("Cannot find a definition for variable: {0}", variable))
-        {
-        }
-    }
-
-    public class InvalidMathNodeException : MathParserException
-    {
-        public string NodeType { get; private set; }
-        public InvalidMathNodeException(string node)
-            : base(String.Format("This node should not be called here: {0}", node))
-        {
-            this.NodeType = node;
-        }
-    }
 
     public class DivideByZeroException : MathParserException
     {

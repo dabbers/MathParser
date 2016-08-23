@@ -51,14 +51,17 @@ namespace dab.Library.MathParser
                 }
                 else if ((expression[i] == ',' || expression[i] == ')') && 0 == parendepth)
                 {
-                    if (currentParam.Length > 0)
+                    if (functiondone)
                     {
-                        res.Add(currentParam.ToString());
-                        currentParam.Clear();
-                    }
-                    else
-                    {
-                        throw new InvalidFunctionArgument(expression);
+                        if (currentParam.Length > 0)
+                        {
+                            res.Add(currentParam.ToString());
+                            currentParam.Clear();
+                        }
+                        else
+                        {
+                            throw new InvalidFunctionArgument(expression);
+                        }
                     }
                 }
                 else if (true == functiondone)

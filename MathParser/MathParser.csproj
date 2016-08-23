@@ -76,7 +76,6 @@
     <Compile Include="uninodes\unioperators\SinhUniLeafMathNode.cs" />
     <Compile Include="uninodes\unioperators\LogUniLeafMathNode.cs" />
     <Compile Include="uninodes\UnitUniLeafMathNode.cs" />
-    <Compile Include="uninodes\VariableMathNode.cs" />
     <Compile Include="UnitDouble.cs" />
     <Compile Include="UnitFactory.cs" />
     <Compile Include="UnitTypes\CurrencyConverter.cs" />

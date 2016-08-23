@@ -35,6 +35,11 @@ namespace dab.Library.UnitTests.MathParserUnitTest
         {
             Assert.AreEqual(45, mp.Evaluate("45").Value);
         }
+        [TestMethod]
+        public void SingleNumberCommas()
+        {
+            Assert.AreEqual(4500, mp.Evaluate("4,500").Value);
+        }
 
         [TestMethod]
         [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
@@ -164,14 +169,14 @@ namespace dab.Library.UnitTests.MathParserUnitTest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidOperatorException))]
         public void InvalidExpressionOperatorBefore()
         {
             mp.Evaluate("+ 1 1");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidOperatorException))]
         public void InvalidExpressionOperatorAfter()
         {
             mp.Evaluate("1 1 +");
@@ -185,7 +190,7 @@ namespace dab.Library.UnitTests.MathParserUnitTest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
+        [ExpectedException(typeof(dab.Library.MathParser.InvalidOperatorException))]
         public void InvalidExpressionDoubleOperator()
         {
             mp.Evaluate("1 + * 2");
@@ -285,6 +290,13 @@ namespace dab.Library.UnitTests.MathParserUnitTest
             Assert.AreEqual("0", mp.Evaluate("1 >> 32").ToString());
             Assert.AreEqual("-9,223,372,036,854,775,808", mp.Evaluate("1 << 2147483647").ToString());
             Assert.AreEqual("0", mp.Evaluate("1 >> 2147483647").ToString());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidUnitTypeException))]
+        public void TestInvalidUnits()
+        {
+           mp.Evaluate("1 BadUnit to OtherBadUnit");
         }
     }
 }
