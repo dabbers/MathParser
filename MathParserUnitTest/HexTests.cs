@@ -89,5 +89,29 @@ namespace MathParserUnitTest
         {
             Assert.AreEqual(0x1 + 1, mp.Evaluate("0xZ04 + 1").Value);
         }
+
+        [TestMethod]
+        public void BinaryTest()
+        {
+            Assert.AreEqual(3, mp.Evaluate("0b11").Value);
+        }
+
+        [TestMethod]
+        public void BinaryTest2()
+        {
+            Assert.AreEqual(6, mp.Evaluate("0b11 + 3").Value);
+        }
+
+        [TestMethod]
+        public void HexPlusBinary()
+        {
+            Assert.AreEqual(4, mp.Evaluate("0b11 + 0x01").Value);
+        }
+
+        [TestMethod]
+        public void CastToBinary()
+        {
+            Assert.AreEqual("0b11", mp.Evaluate("(0b10 + 0x01) as Binary").ToString());
+        }
     }
 }

@@ -21,6 +21,7 @@ namespace dab.Library.MathParser
             this.Converter = copy.Converter;
             this.Reduce = copy.Reduce;
         }
+
         public UnitTypes UnitType { get; set; }
 
         public decimal Value { get; set; }
@@ -48,9 +49,12 @@ namespace dab.Library.MathParser
             this.UnitType = unitType;
             this.Converter = convert;
             this.Unit = unit;
-
         }
 
+        public string Interpretation()
+        {
+            return "";
+        }
 
         public override string ToString()
         {
@@ -86,6 +90,10 @@ namespace dab.Library.MathParser
             else if (value.UnitType == UnitTypes.Octal)
             {
                 return "0" + Convert.ToString(((long)value.Value), 8);
+            }
+            else if (value.UnitType == UnitTypes.Binary)
+            {
+                return "0b" + Convert.ToString(((long)value.Value), 2);
             }
 
             value.Value = Math.Round(value.Value, 6);

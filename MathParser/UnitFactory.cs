@@ -119,8 +119,19 @@ namespace dab.Library.MathParser
                 try
                 {
                     string number = expression.Substring(2);
-                    var val = (decimal)int.Parse(number, System.Globalization.NumberStyles.HexNumber);
+                    var val = (decimal)Int64.Parse(number, System.Globalization.NumberStyles.HexNumber);
                     return new NumericMathNode(new UnitDouble(val, UnitTypes.Hexadecimal, NumericBaseUnits.Hexadecimal, new NumericBaseConverter()));
+                }
+                catch { }
+
+            }
+            if (expression[0] == '0' && (expression[1] == 'b' || expression[1] == 'B'))
+            {
+                try
+                {
+                    string number = expression.Substring(2);
+                    var val = (decimal)Convert.ToInt64(number, 2);
+                    return new NumericMathNode(new UnitDouble(val, UnitTypes.Binary, NumericBaseUnits.Binary, new NumericBaseConverter()));
                 }
                 catch { }
 

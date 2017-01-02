@@ -18,6 +18,11 @@ namespace dab.Library.MathParser
         [UnitType(UnitTypes.Hexadecimal)]
         Hexadecimal,
 
+        [UnitAbbreviation("Bin")]
+        [UnitPlural("Binary")]
+        [UnitType(UnitTypes.Binary)]
+        Binary,
+
         [UnitAbbreviation("")]
         [UnitPlural("")]
         [UnitType(UnitTypes.Decimal)]

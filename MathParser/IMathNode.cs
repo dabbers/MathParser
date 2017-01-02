@@ -31,6 +31,7 @@ namespace dab.Library.MathParser
         Hexadecimal,
         Decimal,
         Octal,
+        Binary,
 
         Time,
 
