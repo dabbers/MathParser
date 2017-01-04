@@ -26,9 +26,9 @@ namespace dab.Library.MathParser
         // Breaks up the expression into either a conversion of (expr) to unit or (exp) unit or unit(exp) with whitespace optional.
         private static Regex unitParser = new Regex
         (
-            @"^(?:(?<value>.+)\s+(?:to|as|in)\s+(?<to>[A-z$€£฿]+)|(?<value>(?!\s(?:to|as)\s).+?)\s*(?<from>[A-z$€£฿]+)|(?<from>[$€£฿])\s*(?<value>(?!\s(?:to|as)\s).+?))$"
+            @"^(?:(?<value>.+)\s+(?:to|as|in)\s+(?<to>[A-z$€£฿]+)|(?<value>(?!\s(?:to|as)\s).+?)\s*(?<from>[A-z$€£฿""']+)|(?<from>[$€£฿])\s*(?<value>(?!\s(?:to|as)\s).+?))$"
         );
-
+        // ""'
         private UnitConverter[] converters;
 
         public IMathNode TryParse(string expression, MathParser parser)
@@ -50,6 +50,12 @@ namespace dab.Library.MathParser
             var to = results.Groups["to"];
             var from = results.Groups["from"];
             Group actionable;
+
+
+            if (expr.Value == "\"" && from.Value.Last() == '"')
+            {
+                return null;
+            }
 
             // Continue parsing the left side of this Unit declaration
             // If this is a conversion, this will come back here until there
@@ -102,7 +108,7 @@ namespace dab.Library.MathParser
 
             if (hold != null)
             {
-                valu.UnitType = hold.UnitType;
+                //valu.UnitType = hold.UnitType;
             }
 
             return new UnitUniLeafMathNode(valu, (hold == null ? UnitTypes.None : hold.UnitType), converter, tmpEnum);
@@ -112,6 +118,7 @@ namespace dab.Library.MathParser
         private IMathNode isSpeicalFormattedNumber(string expression)
         {
             expression = expression.Trim();
+            var nbc = new NumericBaseConverter();
 
             // Probably formatted via 0x hex? Check for hex input
             if (expression[0] == '0' && (expression[1] == 'x' || expression[1] == 'X'))
@@ -120,7 +127,8 @@ namespace dab.Library.MathParser
                 {
                     string number = expression.Substring(2);
                     var val = (decimal)Int64.Parse(number, System.Globalization.NumberStyles.HexNumber);
-                    return new NumericMathNode(new UnitDouble(val, UnitTypes.Hexadecimal, NumericBaseUnits.Hexadecimal, new NumericBaseConverter()));
+                    var inner = new NumericMathNode(new UnitDouble(val, UnitTypes.Hexadecimal, NumericBaseUnits.Hexadecimal, nbc)) { UnitType = UnitTypes.Hexadecimal };
+                    return new UnitUniLeafMathNode(inner, UnitTypes.Hexadecimal, nbc, NumericBaseUnits.Hexadecimal);
                 }
                 catch { }
 
@@ -131,7 +139,8 @@ namespace dab.Library.MathParser
                 {
                     string number = expression.Substring(2);
                     var val = (decimal)Convert.ToInt64(number, 2);
-                    return new NumericMathNode(new UnitDouble(val, UnitTypes.Binary, NumericBaseUnits.Binary, new NumericBaseConverter()));
+                    var inner = new NumericMathNode(new UnitDouble(val, UnitTypes.Binary, NumericBaseUnits.Binary, nbc)) { UnitType = UnitTypes.Binary };
+                    return new UnitUniLeafMathNode(inner, UnitTypes.Binary, nbc, NumericBaseUnits.Binary);
                 }
                 catch { }
 
@@ -141,7 +150,8 @@ namespace dab.Library.MathParser
                 try
                 {
                     var val = (decimal)Convert.ToInt64(expression, 8);
-                    return new NumericMathNode(new UnitDouble(val, UnitTypes.Octal, NumericBaseUnits.Octal, new NumericBaseConverter()));
+                    var inner = new NumericMathNode(new UnitDouble(val, UnitTypes.Octal, NumericBaseUnits.Octal, nbc)) { UnitType = UnitTypes.Octal };
+                    return new UnitUniLeafMathNode(inner, UnitTypes.Octal, nbc, NumericBaseUnits.Octal);
                 }
                 catch { }
             }

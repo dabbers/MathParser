@@ -22,8 +22,8 @@ namespace CalculateApi
                 }
                 else
                 {
-                    var res = mp.Evaluate(expression);
-                    Response.Write(mp.GetInterpretation() + " = " + res.ToString());
+                    var res = mp.GetEvaluation(expression);
+                    Response.Write(res.ToString()); // interpretation = evaluate
                 }
             }
             catch (MathParserException ex)

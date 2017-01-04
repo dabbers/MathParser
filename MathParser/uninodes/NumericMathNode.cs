@@ -30,14 +30,18 @@ namespace dab.Library.MathParser
         {
             if (((UnitDouble)this.Value).UnitType == UnitTypes.Hexadecimal)
             {
-                return "0x"+((int)((UnitDouble)this.Value).Value).ToString("X");
+                return "0x"+((long)((UnitDouble)this.Value).Value).ToString("X");
             }
             else if (((UnitDouble)this.Value).UnitType == UnitTypes.Octal)
             {
-                return "0" + Convert.ToString(((int)((UnitDouble)this.Value).Value), 8);
+                return "0" + Convert.ToString(((long)((UnitDouble)this.Value).Value), 8);
+            }
+            else if (((UnitDouble)this.Value).UnitType == UnitTypes.Binary)
+            {
+                return "0b" + Convert.ToString(((long)((UnitDouble)this.Value).Value), 2);
             }
 
-            string number = ((UnitDouble)this.Value).Value.ToString();
+            string number = ((UnitDouble)this.Value).Value.ToString(UnitDouble.FORMATTING_STRING_DEFAULT);
             // In case I need to manipulate it somehow in the future
             return number;
         }

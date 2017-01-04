@@ -27,7 +27,7 @@ namespace dab.Library.MathParser
         public override string ToString()
         {
             //		Unit	Decimal	System.Enum {dab.Library.MathParser.NumericBaseUnits}
-            if (this.Unit != null && (NumericBaseUnits)this.Unit == NumericBaseUnits.Decimal)
+            if (this.Unit != null && (NumericBaseUnits)this.Unit == NumericBaseUnits.Decimal && true == this.Reduce)
             {
                 return base.ToString();
             }

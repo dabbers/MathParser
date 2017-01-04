@@ -70,20 +70,40 @@ namespace dab.Library.MathParser
             string seperator = " ";
 
             var numeric = this.Inner as NumericMathNode;
+            decimal expressedNumeric = Decimal.MaxValue;
+            var unit = this.labelledUnit.ToString();
 
             if (null != numeric)
             {
+                expressedNumeric = ((UnitDouble)numeric.Value).Value;
+
                 if (UnitTypes.Hexadecimal == numeric.UnitType)
                 {
-                    number = ((int)this.converter.Convert(((UnitDouble)numeric.Value).Value, this.converter.BaseUnit, this.labelledUnit)).ToString("X");
+                    number = "0x" + ((long)expressedNumeric).ToString("X");
+                    unit = "";
+                    seperator = "";
                 }
                 else if (UnitTypes.Octal == numeric.UnitType)
                 {
-                    number = "0" + Convert.ToString(((int)this.converter.Convert(((UnitDouble)numeric.Value).Value, this.converter.BaseUnit, this.labelledUnit)), 8);
+                    number = "0" + Convert.ToString(((long)expressedNumeric), 8);
+                    unit = "";
+                    seperator = "";
+                }
+                else if (UnitTypes.Binary == numeric.UnitType)
+                {
+                    number = "0b" + Convert.ToString(((long)expressedNumeric), 2);
+                    unit = "";
+                    seperator = "";
                 }
                 else
                 {
-                    number = this.converter.Convert(((UnitDouble)numeric.Value).Value, this.converter.BaseUnit, this.labelledUnit).ToString("###,###,###,###,##0.############");
+                    expressedNumeric = Math.Round(this.converter.Convert(expressedNumeric, this.converter.BaseUnit, this.labelledUnit), 6);
+                    number = expressedNumeric.ToString(UnitDouble.FORMATTING_STRING_DEFAULT);
+                }
+
+                if (numeric.Value is UnitDouble && ((UnitDouble)numeric.Value).Converter is NumericBaseConverter)
+                {
+                    seperator = " as ";
                 }
             }
             else
@@ -97,9 +117,50 @@ namespace dab.Library.MathParser
                         seperator = " as ";
                     }
                 }
+                else
+                {
+
+                    var smn = this.Inner as StringMathNode;
+
+                    if (null != smn)
+                    {
+                        seperator = " as ";
+                    }
+                }
             }
 
-            return "(" + number + seperator + this.labelledUnit.ToString() + ")";
+            if (unit != "")
+            {
+                if (expressedNumeric != 1 && expressedNumeric != Decimal.MaxValue)
+                {
+                    var tmp = this.labelledUnit.GetAttributeOfType<UnitPluralAttribute>();
+                    if (tmp != null)
+                    {
+                        unit = tmp.FirstOrDefault().Plural;
+                    }
+                }
+                else
+                {
+                    var templbl = this.labelledUnit.GetAttributeOfType<DisplayAttribute>();
+                    if (templbl != null)
+                    {
+                        var singluar_label = templbl.FirstOrDefault().Display;
+
+                        // If the label is empty, don't override the unit if we're converting
+                        if (!String.IsNullOrEmpty(singluar_label) || seperator != " as ")
+                        {
+                            unit = singluar_label;
+                        }
+                    }
+                }
+            }
+
+            if (unit == "")
+            {
+                seperator = "";
+            }
+
+            return "(" + number + seperator + unit + ")";
             
         }
 

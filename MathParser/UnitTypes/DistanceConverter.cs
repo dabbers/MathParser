@@ -14,6 +14,7 @@ namespace dab.Library.MathParser
         [UnitType(UnitTypes.DistanceImperial)]
         Centimeter,
         [UnitAbbreviation("ft")]
+        [UnitAbbreviation("'")]
         [UnitPlural("Feet")]
         [UnitType(UnitTypes.DistanceImperial)]
         Foot,
@@ -27,6 +28,7 @@ namespace dab.Library.MathParser
         Mile,
         [UnitAbbreviation("in")]
         [UnitPlural("Inches")]
+        [UnitAbbreviation("\"")]
         [UnitType(UnitTypes.DistanceImperial)]
         Inch,
         [UnitAbbreviation("nm")]

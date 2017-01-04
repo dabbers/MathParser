@@ -12,6 +12,8 @@ namespace dab.Library.MathParser
     /// </summary>
     public class UnitDouble
     {
+        public const string FORMATTING_STRING_DEFAULT = "###,###,###,###,##0.############";
+
         public UnitDouble(UnitDouble copy)
         {
             this.UnitType = copy.UnitType;
@@ -51,11 +53,6 @@ namespace dab.Library.MathParser
             this.Unit = unit;
         }
 
-        public string Interpretation()
-        {
-            return "";
-        }
-
         public override string ToString()
         {
             var value = new UnitDouble(this);
@@ -70,7 +67,7 @@ namespace dab.Library.MathParser
                 value.Unit = value.DesiredUnit;
             }
 
-            string formatting = "###,###,###,###,##0.############ ";
+            string formatting = UnitDouble.FORMATTING_STRING_DEFAULT + " ";
 
             if (Reduce && value.Value > 10000000000000000)
             {

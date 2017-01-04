@@ -49,6 +49,7 @@
     <Compile Include="binodes\operators\ModulusBiLeafMathNode.cs" />
     <Compile Include="binodes\operators\DivisionBiLeafMathNode.cs" />
     <Compile Include="binodes\operators\MultiplicationBiLeafMathNode.cs" />
+    <Compile Include="EvaluationTree.cs" />
     <Compile Include="OperatorFactory.cs" />
     <Compile Include="binodes\operators\ExponentBiLeafMathNode.cs" />
     <Compile Include="binodes\operators\SubtractionBiLeafMathNode.cs" />

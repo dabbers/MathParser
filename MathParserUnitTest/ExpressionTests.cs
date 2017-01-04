@@ -19,9 +19,9 @@ namespace dab.Library.UnitTests.MathParserUnitTest
         [TestMethod]
         public void GetInterpretationExpression()
         {
-            var eval = mp.Evaluate("Sin(ASin(Tan(Atan(Cos(acos((sqrt(4)^2)/4))))))");
+            var eval = mp.GetEvaluation("Sin(ASin(Tan(Atan(Cos(acos((sqrt(4)^2)/4))))))");
 
-            Assert.AreEqual("Sin(ASin(Tan(ATan(Cos(ACos((Sqrt(4) ^ 2) / 4))))))", mp.GetInterpretation());
+            Assert.AreEqual("Sin(ASin(Tan(ATan(Cos(ACos((Sqrt(4) ^ 2) / 4))))))", eval.GetInterpretation());
         }
 
         [TestMethod]
@@ -34,11 +34,14 @@ namespace dab.Library.UnitTests.MathParserUnitTest
         public void SingleNumber()
         {
             Assert.AreEqual(45, mp.Evaluate("45").Value);
+
+            Assert.AreEqual("45", mp.GetEvaluation("45 as decimal").GetInterpretation());
         }
         [TestMethod]
         public void SingleNumberCommas()
         {
             Assert.AreEqual(4500, mp.Evaluate("4,500").Value);
+            Assert.AreEqual("4,500", mp.GetInterpretation("4,500"));
         }
 
         [TestMethod]
@@ -101,6 +104,8 @@ namespace dab.Library.UnitTests.MathParserUnitTest
         {
             Assert.AreEqual(-3, mp.Evaluate("2 - 5").Value);
             Assert.AreEqual(3, mp.Evaluate("5 -2").Value);
+
+            Assert.AreEqual("5 - 2", mp.GetInterpretation("5 -2"));
         }
 
         [TestMethod]
@@ -212,7 +217,7 @@ namespace dab.Library.UnitTests.MathParserUnitTest
         public void ValidFunctionParen()
         {
             Assert.AreEqual(4, mp.Evaluate("sqrt(16)").Value);
-            Assert.IsTrue(mp.GetInterpretation().StartsWith("Sqrt(16)"));
+            Assert.IsTrue(mp.GetInterpretation("sqrt(16)").StartsWith("Sqrt(16)"));
         }
         [TestMethod]
         [ExpectedException(typeof(dab.Library.MathParser.InvalidMathExpressionException))]
@@ -252,11 +257,9 @@ namespace dab.Library.UnitTests.MathParserUnitTest
         [TestMethod]
         public void GetInterpretations()
         {
-            mp.Evaluate("Sin(16)");
-            Assert.AreEqual("Sin(16)", mp.GetInterpretation());
+            Assert.AreEqual("Sin(16)", mp.GetInterpretation("Sin(16)"));
 
-            mp.Evaluate("1 foot as inches");
-            Assert.AreEqual("(1 Foot) as Inch", mp.GetInterpretation());
+            Assert.AreEqual("(1 Foot) as Inch", mp.GetInterpretation("1 foot as inches"));
         }
 
         [TestMethod]

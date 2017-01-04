@@ -15,11 +15,6 @@ namespace dab.Library.MathParser
     /// </summary>
     public class MathParser
     {
-        /// <summary>
-        /// The root of our node.
-        /// </summary>
-        public IMathNode Root { get; set; }
-
         public GetValueOfVariable GetValueOfVariable { get; set; }
 
         /// <summary>
@@ -65,33 +60,22 @@ namespace dab.Library.MathParser
         /// <returns>The value from the expression</returns>
         public UnitDouble Evaluate(string expression)
         {
+            return this.GetEvaluation(expression).Evaluate();
+        }
+
+        public EvaluationTree GetEvaluation(string expression)
+        {
             //expression = expression.Replace(" ", "");
             expression = clearSpace.Replace(expression, "$1$3");
-            this.Root = this.Parse(expression);
-
-            return evaluate(this.Root);
+            var root = new EvaluationTree(this.Parse(expression));
+            return root;
         }
 
         public string GetInterpretation(string expression)
         {
-            this.Root = this.Parse(expression);
-            return this.GetInterpretation();
+            return this.GetEvaluation(expression).GetInterpretation();
         }
-
-        public string GetInterpretation()
-        {
-            return this.Root.ToString().TrimOuterParens();
-        }
-
-        private UnitDouble evaluate(IMathNode node)
-        {
-            if (node == null)
-            {
-                return new UnitDouble(0);
-            }
-
-            return node.Evaluate();
-        }
+        
         /// <summary>
         /// Parse an expression. left and right values and stores the whole expression into the Root.
         /// </summary>

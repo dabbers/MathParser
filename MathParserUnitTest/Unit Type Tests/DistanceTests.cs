@@ -13,18 +13,20 @@ namespace MathParserUnitTest.Unit_Type_Tests
         public void SimpleDistanceConvert()
         {
             Assert.AreEqual("12 Inches", mp.Evaluate("1 foot to inches").ToString());
+            Assert.AreEqual("12 Inches", mp.Evaluate("1' to inches").ToString());
         }
 
         [TestMethod]
         public void DistanceLargeToSmaller()
         {
-            Assert.AreEqual("5 Centimeters", mp.Evaluate(".05 meter").ToString());
+            Assert.AreEqual("0.05 Meters", mp.Evaluate(".05 meter").ToString());
         }
 
         [TestMethod]
         public void ReduceDistanceConvert()
         {
             Assert.AreEqual("1 Foot", mp.Evaluate("12in to foot").ToString());
+            Assert.AreEqual("1 Foot", mp.Evaluate("12\" to foot").ToString());
         }
 
         [TestMethod]

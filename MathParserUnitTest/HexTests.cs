@@ -113,5 +113,12 @@ namespace MathParserUnitTest
         {
             Assert.AreEqual("0b11", mp.Evaluate("(0b10 + 0x01) as Binary").ToString());
         }
+
+        [TestMethod]
+        public void GetInterpretation()
+        {
+            Assert.AreEqual("(0x13) as Binary", mp.GetInterpretation("0x13 as binary"));
+            Assert.AreEqual("45 as Binary", mp.GetInterpretation("45 as binary"));
+        }
     }
 }

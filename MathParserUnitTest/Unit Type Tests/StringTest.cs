@@ -24,7 +24,12 @@ namespace MathParserUnitTest.Unit_Type_Tests
         public void StringToLong()
         {
             Assert.AreEqual("1,751,477,359", mp.Evaluate("\"helo\" as decimal").ToString());
-            Assert.AreEqual("\"helo\" Decimal", mp.GetInterpretation());
+
+
+            Assert.AreEqual("\"helo\"", mp.GetInterpretation("\"helo\" as string"));
+            Assert.AreEqual("\"helo\"", mp.GetInterpretation("\"helo\""));
+
+            Assert.AreEqual("\"helo\" as Decimal", mp.GetInterpretation("\"helo\" as decimal"));
         }
 
         [TestMethod]
