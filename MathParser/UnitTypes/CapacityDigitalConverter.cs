@@ -46,7 +46,49 @@ namespace dab.Library.MathParser
         [UnitPlural("Yottabytes")]
         [UnitType(UnitTypes.CapacityDigital)]
         Yottabyte,
+
+        // Bits
+        [UnitAbbreviation("kbit")]
+        [UnitPlural("Kilobits")]
+        [UnitType(UnitTypes.CapacityDigital)]
+        Kilobit,
+        [UnitAbbreviation("mbit")]
+        [UnitPlural("Megabits")]
+        [UnitType(UnitTypes.CapacityDigital)]
+        Megabit,
+        [UnitAbbreviation("gbit")]
+        [UnitPlural("Gigabits")]
+        [UnitType(UnitTypes.CapacityDigital)]
+        Gigabit,
+        [UnitAbbreviation("tbit")]
+        [UnitPlural("Terabits")]
+        [UnitType(UnitTypes.CapacityDigital)]
+        Terabit,
+        [UnitAbbreviation("pbit")]
+        [UnitPlural("Petabits")]
+        [UnitType(UnitTypes.CapacityDigital)]
+        Petabit,
+        [UnitAbbreviation("ebit")]
+        [UnitPlural("Exabits")]
+        [UnitType(UnitTypes.CapacityDigital)]
+        Exabit,
+        [UnitAbbreviation("zbit")]
+        [UnitPlural("Zettabits")]
+        [UnitType(UnitTypes.CapacityDigital)]
+        Zettabit,
+        [UnitAbbreviation("ybit")]
+        [UnitPlural("Yottabits")]
+        [UnitType(UnitTypes.CapacityDigital)]
+        Yottabit,
+
         Unknown
+    }
+    public static class DigitalHlper
+    {
+        public static bool IsBit(this CapacityDigitalUnits unit)
+        {
+            return unit == CapacityDigitalUnits.Bit;// || (unit >= CapacityDigitalUnits.Kilobit && unit <= CapacityDigitalUnits.Yottabit);
+        }
     }
 
     public class CapacityDigitalConverter : UnitConverter
@@ -71,6 +113,15 @@ namespace dab.Library.MathParser
             conversionMap.Add(CapacityDigitalUnits.Exabyte, (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024);
             conversionMap.Add(CapacityDigitalUnits.Zettabyte, (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024);
             conversionMap.Add(CapacityDigitalUnits.Yottabyte, (decimal)1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024);
+
+            conversionMap.Add(CapacityDigitalUnits.Kilobit, 125);
+            conversionMap.Add(CapacityDigitalUnits.Megabit, 125 * 1000);
+            conversionMap.Add(CapacityDigitalUnits.Gigabit, (long)125 * 1000 * 1000);
+            conversionMap.Add(CapacityDigitalUnits.Terabit, (long)125 * 1000 * 1000 * 1000);
+            conversionMap.Add(CapacityDigitalUnits.Petabit, (decimal)125 * 1000 * 1000 * 1000 * 1000);
+            conversionMap.Add(CapacityDigitalUnits.Exabit, (decimal)125 * 1000 * 1000 * 1000 * 1000 * 1000);
+            conversionMap.Add(CapacityDigitalUnits.Zettabit, (decimal)125 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000);
+            conversionMap.Add(CapacityDigitalUnits.Yottabit, (decimal)125 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000);
         }
 
         /// <summary>
@@ -95,19 +146,19 @@ namespace dab.Library.MathParser
             value *= conversion;
 
             // Convert meter to to.
-            if (toDu != CapacityDigitalUnits.Bit && !conversionMap.TryGetValue(toDu, out conversion))
+            if (!toDu.IsBit() && !conversionMap.TryGetValue(toDu, out conversion))
             {
                 throw new InvalidUnitTypeException(toDu.ToString());
             }
 
             // Handle converting to/from bits
-            if (fromDu == CapacityDigitalUnits.Bit && toDu != CapacityDigitalUnits.Bit)
+            if (fromDu.IsBit() && !toDu.IsBit())
             {
-                conversion = 8;
+                conversion *= 8;
             }
-            else if (fromDu != CapacityDigitalUnits.Bit && toDu == CapacityDigitalUnits.Bit)
+            else if (!fromDu.IsBit() && toDu.IsBit())
             {
-                conversion = (decimal)1 / 8;
+                conversion *= (decimal)1 / 8;
             }
 
             return value / conversion;

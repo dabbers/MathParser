@@ -145,5 +145,17 @@ Divide those and you get 1,048,576 which is 1 MB.
             Assert.AreEqual("1 Megabyte", mp.Evaluate("1 terabyte / 1mb").ToString());
         }
 
+
+        [TestMethod]
+        public void BitTests()
+        {
+            //Assert.AreEqual("1 Kilobit", mp.Evaluate("1000 bit to kilobits").ToString());
+            //Assert.AreEqual("1,000 Bits", mp.Evaluate("1 kilobits to bit").ToString());
+            //Assert.AreEqual("0.001 Terabits", mp.Evaluate("1 gigabit to terabit").ToString());
+            Assert.AreEqual("7.629395 Megabytes", mp.Evaluate("64 megabit to megabyte").ToString());
+        }
+
+
+
     }
 }
