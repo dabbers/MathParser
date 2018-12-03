@@ -16,7 +16,7 @@ namespace dab.Library.MathParser
 
         public override UnitDouble Evaluate()
         {
-            throw new InvalidMathNodeException(String.Format("VariableMathNode ({0})", this.Value.ToString()));
+            throw new Exception(String.Format("VariableMathNode ({0})", this.Value.ToString()));
         }
     }
 }

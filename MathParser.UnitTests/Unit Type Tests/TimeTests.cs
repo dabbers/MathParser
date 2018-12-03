@@ -19,7 +19,7 @@ namespace MathParserUnitTest.Unit_Type_Tests
         [TestMethod]
         public void TimeTestBiggerLabelToSmaller()
         {
-            Assert.AreEqual("0.05 Seconds", mp.Evaluate("0.005 seconds").ToString());
+            Assert.AreEqual("0.005 Seconds", mp.Evaluate("0.005 seconds").ToString());
         }
     }
 }

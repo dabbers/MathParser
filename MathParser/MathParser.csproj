@@ -1,103 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C8555901-6DD2-4DAB-9259-D83A3ED19B52}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>dab.Library.MathParser</RootNamespace>
-    <AssemblyName>dab.Library.MathParser</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="binodes\operators\BitwiseAndBiLeafMathNode.cs" />
-    <Compile Include="binodes\operators\BitwiseOrBiLeafMathNode.cs" />
-    <Compile Include="binodes\operators\BitwiseShiftLeftBiLeafMathNode.cs" />
-    <Compile Include="binodes\operators\BitwiseShiftRightBiLeafMathNode.cs" />
-    <Compile Include="binodes\operators\ModulusBiLeafMathNode.cs" />
-    <Compile Include="binodes\operators\DivisionBiLeafMathNode.cs" />
-    <Compile Include="binodes\operators\MultiplicationBiLeafMathNode.cs" />
-    <Compile Include="EvaluationTree.cs" />
-    <Compile Include="OperatorFactory.cs" />
-    <Compile Include="binodes\operators\ExponentBiLeafMathNode.cs" />
-    <Compile Include="binodes\operators\SubtractionBiLeafMathNode.cs" />
-    <Compile Include="binodes\operators\AdditionBiLeafMathNode.cs" />
-    <Compile Include="binodes\BiLeafMathNode.cs" />
-    <Compile Include="IMathNode.cs" />
-    <Compile Include="MathParser.cs" />
-    <Compile Include="RemoveOuterParens.cs" />
-    <Compile Include="StringFromDouble.cs" />
-    <Compile Include="uninodes\NumericMathNode.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="binodes\operators\SymbolMathNode.cs" />
-    <Compile Include="UniLeafFactory.cs" />
-    <Compile Include="uninodes\StringMathNode.cs" />
-    <Compile Include="uninodes\UniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\ASinUniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\ATanUniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\ACosUniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\SqrtUniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\TanUniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\NegateUniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\SinUniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\CosUniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\CoshUniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\SinhUniLeafMathNode.cs" />
-    <Compile Include="uninodes\unioperators\LogUniLeafMathNode.cs" />
-    <Compile Include="uninodes\UnitUniLeafMathNode.cs" />
-    <Compile Include="UnitDouble.cs" />
-    <Compile Include="UnitFactory.cs" />
-    <Compile Include="UnitTypes\CurrencyConverter.cs" />
-    <Compile Include="UnitTypes\CapacityDigitalConverter.cs" />
-    <Compile Include="UnitTypes\NumericBaseConverter.cs" />
-    <Compile Include="UnitTypes\TemperatureConverter.cs" />
-    <Compile Include="UnitTypes\TimeConverter.cs" />
-    <Compile Include="UnitTypes\VolumeConverter.cs" />
-    <Compile Include="UnitTypes\WeightConverter.cs" />
-    <Compile Include="UnitTypes\DistanceConverter.cs" />
-    <Compile Include="UnitTypes\UnitConverter.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
